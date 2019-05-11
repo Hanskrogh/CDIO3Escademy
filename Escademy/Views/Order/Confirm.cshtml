@@ -1,0 +1,256 @@
+﻿@{
+    ViewBag.Title = "Confirm Order";
+
+    string s_price(decimal price)
+    {
+        return price.ToString("0.00").Replace(",", ".");
+    }
+
+}
+@section scripts {
+    <script src="/Scripts/js/jquery-3.3.1.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/popper.min.js" type="text/javascript" language="javascript"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+
+
+    <script>
+        window.onscroll = function () { myFunction() };
+
+        var header = document.getElementById("myHeader");
+        var sticky = header.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
+
+    <!-- FlexSlider -->
+    <script src="/Scripts/js/jquery.flexslider.js"></script>
+    <script src="/Scripts/js/helper-plugins.js"></script>
+    <script src="/Scripts/js/init.js"></script>
+
+
+
+}
+@section styles {
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/css/all.css">
+    <link href="/Content/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Styles Rendered -->
+    <link href="/Content/css/cssb.css" rel="stylesheet">
+    <link href="/Content/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/css/custom-style.css" rel="stylesheet">
+    <link href="/Content/css/flexslider.css" rel="stylesheet" />
+
+}
+
+@{
+    if (ViewBag.coach == null)
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This coach could not be found</h1>
+            </div>
+        </section>
+    }
+    else
+    {
+        Escademy.Models.GameCoaching coach = ViewBag.coach;
+        Escademy.Models.User user = ViewBag.user;
+
+        decimal fee = 1.0M;
+        decimal subtotal = coach.SalaryUSD * (int)ViewBag.quantity;
+        decimal total = subtotal + fee;
+            
+        <div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="detailtop">
+                            <div class="row">
+                                <div class="col-lg-6 order-lg-1 order-md-2 order-sm-2">
+                                    <ul class="leftmenu">
+                                        <li><a href="@Url.Action("New","Order")"><span>1</span>Order Details</a></li>
+                                        <li><a href="@Url.Action("Confirm","Order")" class="active"><span>2</span> Confirm & Pay</a></li>
+                                    </ul>
+                                    <div class="flclear"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="detailcontent">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="pb-3">
+                            <div class="contentinfo">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>Payment options</strong>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input disabled class="form-check-input" type="radio" value="option1">
+                                                <label><img src="~/Content/Images/credit-card.jpg" alt="" /> Credit & Debit Cards (Currently Disabled)</label>
+                                            </div>
+                                        </div>
+                                        <div class="spacer10"></div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Card Number</label>
+                                                    <input disabled type="number" class="form-control" placeholder="Card Number">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Expiration Date</label>
+                                                    <input disabled type="text" class="form-control" placeholder="MM/YY">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Security Code <i class="fa fa-question-circle" title="3 digit number located on the back of your credit card or debit card. For American Express, it's a 4 digit number located on the front of the card."></i></label>
+                                                    <input disabled type="number" class="form-control" placeholder="Security Code">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="spacer10"></div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>First Name</label>
+                                                    <input disabled type="text" class="form-control" placeholder="First Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    <input disabled type="text" class="form-control" placeholder="Last Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="spacer20"></div>
+
+                                        <div class="form-group">
+                                            <label>Pay with PayPal</label><br />
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" value="option2" checked>
+                                                <label><img src="~/Content/Images/AM_SbyPP_mc_vs_ms_ae_UK.png" alt="" /></label>
+                                            </div>
+                                        </div>
+
+                                        @*<div class="spacer20"></div>
+                                            <div class="form-group disabled">
+                                                <label class="text-muted" for="google-pay-check">Pay with GooglePay</label><br />
+                                                <div class="form-check form-check-inline">
+                                                    <input id="google-pay-check" disabled class="form-check-input" type="radio" value="option3">
+                                                    <label><img src="~/Content/Images/google-pay-logo.svg" alt="" /></label>
+                                                </div>
+                                            </div>*@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="contentinfo">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Summary</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="orderdiv">
+                                        <div class="media">
+                                            <img class="mr-3" src="@coach.Picture" alt=" ">
+                                            <div class="media-body">
+                                                <div class="mt-0 mb-1"><strong>@coach.Title</strong></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="spacer5"></div>
+                                    <ul class="simpleul">
+                                        <li>
+                                            <div class="pull-left">Quantity</div>
+                                            <div class="pull-right">@ViewBag.quantity</div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <li>
+                                            <div class="pull-left">Price</div>
+                                            <div class="pull-right">$@(s_price(subtotal))</div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <li>
+                                            <div class="pull-left"><input type="text" class="form-control" placeholder="Enter promo code" /></div>
+                                            <div class="pull-right"><button class="btn btn-white-grad btnsmall">Apply</button></div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <li>
+                                            <div class="pull-left">Service Fee <i class="fa fa-question-circle" title="This helps us operate our platform and offer 24/7 customer support for your orders"></i></div>
+                                            <div class="pull-right">$@(s_price(fee))</div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <hr class="hrlinesmall">
+                                        <li>
+                                            <div class="pull-left"><strong>Total</strong></div>
+                                            <div class="pull-right"><strong>$@(s_price(total))</strong></div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                    </ul>
+
+                                    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+                                        <fieldset>
+                                            <input class="full-width" type="hidden" name="business" value="facilitator@escademy.com">
+                                            <input type="hidden" name="cmd" value="_xclick">
+                                            <input type="hidden" name="item_name" value="Coaching">
+                                            <input type="hidden" name="amount" value="@s_price(total)">
+                                            <input type="hidden" name="currency_code" value="USD" />
+
+                                            <input type="hidden" name="no_shipping" value="1">
+                                            @*<input type="hidden" name="quantity" value="@ViewBag.quantity" />*@
+
+                                            <!-- coach_id,game_id,qty,payer_Id -->
+                                            <input type="hidden" name="custom" value="@ViewBag.accountId,@ViewBag.gameId,@ViewBag.quantity,@ViewBag.payerid">
+
+                                            <input type=hidden name="RETURNURL"
+                                                   value="https://www.escademy.com/IPN">
+                                            <input type="hidden" name="return" value="https://www.escademy.com/IPN">
+                                            <input type="hidden" name="notify_url" value="https://www.escademy.com/IPN">
+
+                                            @*<button type="submit">Order now!</button>*@
+                                            <button type="submit" class="btn btn-lrg-standard btn-block">Confirm and Pay</button>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

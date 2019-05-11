@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Email Confirmation";
+
+
+    if (ViewBag.verified)
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                @{
+                    <h1 class="display-3">Verificeret!</h1>
+                }
+                <br />
+                <p class="lead text-muted">
+                    Din konto @ViewBag.email er nu blevet verificeret!
+                    <br />
+                    Tak og velkommen!
+                </p>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                @{
+                    <h1 class="display-3">Øv, noget gik galt!</h1>
+                }
+                <br />
+                <p class="lead text-muted">
+                    Kunne ikke genkende det linket. Tjek om url'en er skrevet korrekt.
+                </p>
+            </div>
+        </section>
+    }
+}

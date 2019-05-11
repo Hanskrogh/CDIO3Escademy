@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+@section styles {
+    <link href="~/Content/login.css" rel="stylesheet">
+}
+
+<!-- Test Comment -->
+
+<div class="container login-container">
+    <div class="row">
+        <div class="col-md-6" style="margin-left: auto; margin-right: auto;">
+            <div class="login-form-1">
+                <img  class="logo" style="width: 100%; height: auto;" src="~/Content/Images/JPEG.jpg" />
+                <form action="@Url.Action("Login", "Auth")" method="post">
+                    @{
+                        if (!ViewBag.success)
+                        {
+                            <p class="invalid-feedback" style="
+                                display: block;
+                                text-align: center;
+                                margin-bottom: 15px;
+                                margin-top: -15px;">
+                                Forkert kodeord eller brugernavn
+                            </p>
+                        }
+                    }
+                    <div class="form-group">
+                        <input name="Email" type="text" class="form-control" placeholder="Email" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="Password" type="password" class="form-control" placeholder="Pssword" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btnSubmit" value="Log in" />
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6" style="text-align: left">
+                            <a href="@Url.Action("Register", "Auth")" class="ForgetPwd"> Sign up?</a>
+                        </div>
+                        <div class="col-xs-12 col-sm-6" style="text-align: right">
+                            <a href="@Url.Action("Forgotpass", "Auth")" class="ForgetPwd"> Forgot password?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

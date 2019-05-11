@@ -1,0 +1,222 @@
+﻿@{
+    ViewBag.Title = "Order Now";
+
+    Escademy.Models.GameCoaching coach = ViewBag.coach;
+    Escademy.Models.User user = ViewBag.user;
+
+    string salary_s(int i)
+    {
+        return (coach.SalaryUSD * i).ToString().Replace(",", ".");
+    }
+}
+@section scripts {
+    <script src="/Scripts/js/jquery-3.3.1.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/popper.min.js" type="text/javascript" language="javascript"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+    <script>
+        window.onscroll = function () { myFunction() };
+
+        var header = document.getElementById("myHeader");
+        var sticky = header.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
+    <script>
+        var quantity;
+
+        function updateTotal(price, fee) {
+            var total = price + fee;
+
+            $(".price-subtotal").text("$" + price);
+            $(".price-servicefee").text("$" + fee);
+            $(".price-total").text("$" + total);
+        }
+
+        $(".order-price-updater").change(function () {
+            quantity = parseInt($(this).find("option:selected").attr("data-quantity"));
+            updateOrderPrice($(this).val());
+        });
+
+        function updateOrderPrice(price) {
+            $(".order-price").text("$" + price);
+            $(".order-price-updater").val(parseFloat(price));
+            updateTotal(parseFloat(price), parseFloat(1));
+        }
+
+        // fix to numeric values.
+        $(".order-price-updater option").each(function () {
+            var price = parseFloat($(this).val());
+            $(this).val(price);
+            var indexValue = parseInt($(this).text().split(" ")[0]);
+            $(this).text(indexValue + " (" + price + "$)");
+        });
+
+        $("#a-confirm").click(function () {
+            location.href = "@Url.Action("Confirm", "Order")?AccountId=@ViewBag.accountId&GameId=@ViewBag.gameId&Quantity="+quantity;
+        });
+            
+        // Automated Val
+        @{
+            if (coach != null)
+            {
+                <text>
+                    updateOrderPrice(@(salary_s((int)ViewBag.quantity)));
+                    quantity = @ViewBag.quantity;
+                </text>
+            }
+        }
+    </script>
+
+    <!-- FlexSlider -->
+    <script src="/Scripts/js/jquery.flexslider.js"></script>
+    <script src="/Scripts/js/helper-plugins.js"></script>
+    <script src="/Scripts/js/init.js"></script>
+
+}
+@section styles {
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/css/all.css">
+    <link href="/Content/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Styles Rendered -->
+    <link href="/Content/css/cssb.css" rel="stylesheet">
+    <link href="/Content/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/css/flexslider.css" rel="stylesheet">
+    <link href="/Content/css/custom-style.css" rel="stylesheet" />
+}
+
+@{
+    if (ViewBag.coach == null)
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This coach could not be found</h1>
+            </div>
+        </section>
+    }
+    else
+    {
+        <div>
+            <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="detailtop">
+                                <div class="row">
+                                    <div class="col-lg-6 order-lg-1 order-md-2 order-sm-2">
+                                        <ul class="leftmenu">
+                                            <li><a href="@Url.Action("New","Order")" class="active"><span>1</span>Order Details</a></li>
+                                            <li><a href="#"><span>2</span> Confirm & Pay</a></li>
+                                        </ul>
+                                        <div class="flclear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detailcontent">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="pt-3 pb-3">
+                                <h3>Your Order Details</h3>
+                                <hr class="hrline">
+                                <div class="orderdiv">
+                                    <div class="media">
+                                        <img class="mr-3" src="@coach.Picture" alt=" ">
+                                        <div class="media-body">
+                                            <div class="row">
+                                                <div class="col-lg-7">
+                                                    <div class="mt-0 mb-1"><strong>@coach.Title</strong></div>
+                                                    <div class="text-muted small">
+                                                        <ul class="reating">
+                                                            <li><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i><a class="ml-2" href="#">(10)</a></li>
+                                                            <li>1 Orders in Queue</li>
+                                                        </ul>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="pull-left pt-1"><strong>Quantity</strong></div>
+                                                    <div class="pull-right">
+                                                        <select class="form-control order-price-updater">
+                                                            @{
+                                                                for (int i = 1; i <= 10; i++)
+                                                                {
+                                                                    <option data-quantity="@i" value="@(salary_s(i))">@i ($@(salary_s(i)))</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="flclear"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="whitebox">
+                                <div>
+                                    <div class="pb-1"><h3>Summary</h3></div>
+                                    <ul class="simpleul">
+                                        <li>
+                                            <div class="pull-left">Subtotal</div>
+                                            <div class="pull-right"><span class="price-subtotal"></span></div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <li>
+                                            <div class="pull-left">Service Fee <i class="fa fa-question-circle" title="This helps us operate our platform and offer 24/7 customer support for your orders"></i></div>
+                                            <div class="pull-right"><span class="price-servicefee"></span></div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                        <hr class="hrlinesmall">
+                                        <li>
+                                            <div class="pull-left"><strong>Total</strong></div>
+                                            <div class="pull-right"><strong><span class="price-total"></span></strong></div>
+                                            <div class="flclear"></div>
+                                        </li>
+                                    </ul>
+                                    <a id="a-confirm" href="#" class="btn btn-lrg-standard btn-block">Order Now</a>
+                                    <div class="text-center pt-2">You won't be charged yet</div>
+                                    <div class="flclear"></div>
+                                </div>
+                            </div>
+                            <div class="pb-4">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-8"><img src="/Content/Images/cards.png" alt="" class="img-fluid" /></div>
+                                    <div class="text-center pt-3 ssl"><i class="fa fa-lock"></i><strong><span>SSL</span> SECURED PAYMENT</strong></div>
+                                    <div class="text-center form-text text-muted font14">Your information is protected by 256-bit SSL encryption</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+}

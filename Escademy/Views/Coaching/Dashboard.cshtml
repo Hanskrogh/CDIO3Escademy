@@ -1,0 +1,155 @@
+﻿@using Escademy.Models;
+@{
+    ViewBag.Title = "Dashboard";
+
+    User user = (User)Session["User"];
+
+    if (user != null)
+    {
+
+        Escademy.Models.User Coach = ViewBag.Seller;
+
+        <div>
+            <section class="sale-section" style="background-color:#f3f3f3;width:100%;">
+                <div class="row dv_Section">
+                    <div class="col-lg-4 col-md-4 col-sm-12 left-section">
+                        <div class="row">
+                            <div class="active-status">
+                                <button class="btn btn-mine btn-xs"> <i class="fa fa-circle" aria-hidden="true"></i>Online</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="profile-image">
+                                <img src="@Coach.Picture">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="user-section">
+                                <div class="user-name">@Coach.FirstName @Coach.LastName</div>
+                                <div class="user-level">Level @Coach.Level Seller</div>
+                            </div>
+                        </div>
+                        <div class="row loader">
+                            <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                                <div class="circlechart" data-percentage="100">100%</div>
+                                <div class="progressText">Response Rate</div>
+                            </div>
+                            <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                                <div class="circlechart" data-percentage="100">100%</div>
+                                <div class="progressText">Delivery On Time</div>
+                            </div>
+                            <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                                <div class="circlechart" data-percentage="85">85%</div>
+                                <div class="progressText">Order Completion</div>
+                            </div>
+                            <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                                <div class="circlechart" id="rating" data-percentage="100"> 5.0</div>
+                                <div class="progressText">Rating</div>
+                            </div>
+                        </div>
+                        <div class="row earn">
+                            <div class="col-md-6 col-sm-6 wdth">
+                                Earned In April
+                            </div>
+                            <div class="col-md-6 col-sm-6 wdth value">
+                                $400
+                            </div>
+                        </div>
+                        <div class="row response">
+                            <div class="col-md-6 col-sm-6 wdth">
+                                Response Time
+                            </div>
+                            <div class="col-md-6 col-sm-6 wdth value time">
+                                1 Hrs
+                            </div>
+                        </div>
+                        <div class="row inbox">
+                            <div class="col-md-6 col-sm-6">
+                                Inbox (0)
+                            </div>
+                            <div class="col-md-6 col-sm-6 value">
+                                <a href="">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 right-section">
+                        <div class="row section ActiveOrderHeading">
+                            <div class="col-lg-12 col-md-12 col-sm-12"><h6 class="orders"><span> Active Orders -</span> <span class="order-count">@ViewBag.TotalActiveOrders ($ @ViewBag.TotalAmount)</span></h6></div>
+                            @*<div class="col-lg-6 col-md-6 col-sm-6 search-section">
+                                    <form class="search">
+                                        <select class="form-control dropdown">
+                                            <option>In Progress(1)</option>
+                                        </select>
+                                    </form>
+                                </div>*@
+                        </div>
+                        <div class="row section orders-section">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                @{
+                                    var ActiveOrdersList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    ActiveOrdersList = ViewBag.ActiveOrder;
+
+                                    if (ActiveOrdersList == null || ActiveOrdersList.Count == 0)
+                                    {
+                                        <div class="row first-section">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 div NoRecord">No Record Found</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        foreach (var order in ActiveOrdersList)
+                                        {
+                                            <div class="row first-section">
+                                                 <div class="mydiv">
+                                                    <table class="table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><div class=""><img class="order-img" src="@order.GamePicture"></div></td>
+                                                                <td><div class="div namming"><div class="name-icon">@order.FirstLetter_BuyerName</div><i class="fa fa-circle usercircle" aria-hidden="true"></i><div class="name">@order.BuyerName</div></div></td>
+                                                                <td><div class="div">Price<br>$ @order.Price</div></td>
+                                                                <td><div class="div">Ordered-At <br />		<i class="fa fa-clock-o" aria-hidden="true"></i> @order.OrderDate</div></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="row bottom-section">
+                                            <div class="col-lg-9 col-md-6 col-sm-12" style="margin-top:5px;">
+                                                <button class="btn btn-xs">IN PROGRESS</button>
+                                                <span style="font-size:14px;">We recomended you deliver early, so there enough time for revisions.</span>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 col-sm-12 order-btn">
+                                                <button class="btn btn-sm btn-success btnView">View Order</button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    }
+    else
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This coach could not be found</h1>
+            </div>
+        </section>
+    }
+}
+
+@section scripts {
+    <script src="/Content/Order/js/progresscircle.js" type="text/javascript" language="javascript"></script>
+    <script>
+        $('.circlechart').circlechart(); // Initialization
+    </script>
+}
+@section styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/Content/Order/css/progresscircle.css" rel="stylesheet" />
+    <link href="/Content/Order/css/style.css" rel="stylesheet" />
+}

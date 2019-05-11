@@ -1,0 +1,864 @@
+﻿@using Escademy.Helpers;
+@using Escademy.Models;
+@{
+    ViewBag.Title = "Profile";
+}
+@{
+    User sessionUser = null;
+    if (Session["user"] != null)
+    {
+        sessionUser = (User)Session["user"];
+    }
+}
+
+@section styles {
+    @*<meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link media="all" rel="stylesheet" href="~/Content/css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+    <link href="~/Content/profile-img.css" type="text/css" rel="stylesheet" />
+
+    <style>
+        .cf {
+            position: relative;
+            height: 230px;
+        }
+
+            .cf img {
+                position: absolute;
+                left: 0;
+                -webkit-transition: opacity 250ms ease-in-out;
+                -moz-transition: opacity 250ms ease-in-out;
+                -o-transition: opacity 250ms ease-in-out;
+                transition: opacity 250ms ease-in-out;
+            }
+
+                .cf img.top:hover {
+                    opacity: 0;
+                }
+
+        .add {
+            color: #00698c;
+            font-size: 14px;
+            font-weight: 400;
+            float: right;
+        }
+
+        .btn-lrg-standard {
+            background-color: #f25a29;
+            font: 700 16px/16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #fff;
+            border: 1px solid transparent;
+            padding: 15px 35px;
+            padding: 11px 22px;
+            font-size: 14px;
+            float: right;
+            margin-top: 15px;
+            width: calc((100% - 15px)/2);
+            padding: 11px 22px;
+            font-size: 14px
+        }
+
+            .btn-lrg-standard:hover {
+                background-color: #ffa73c;
+            }
+
+        .cancel {
+            float: none;
+            margin-right: 15px;
+            background-color: #fff;
+        }
+
+        .btn-white {
+            background: 0 0;
+            background-color: #fff;
+            font-weight: 500;
+            color: #777;
+            border-color: #ccc;
+            text-shadow: none;
+        }
+
+        .capitalize {
+            width: 100%;
+            font-size: 14px;
+            border-color: #e5e5e5;
+            margin-right: 0 !important;
+            -webkit-appearance: none;
+            background-color: #fff;
+            font: 400 12px helvetica neue,Helvetica,Arial,sans-serif;
+            color: #777;
+            border: 1px #b2b2b2 solid;
+            padding: 6px 7px 7px;
+            margin: 0;
+            resize: none;
+            border-radius: 3px;
+            box-sizing: border-box;
+            vertical-align: middle;
+            text-transform: capitalize;
+            margin-bottom: 10px;
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+            height: 40px;
+        }
+
+        .buttons-wrapper {
+            Display: block;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+
+        .delete-lang {
+            cursor: pointer;
+        }
+
+            .delete-lang:hover {
+                background-color: #dc7474;
+                color: #fff;
+            }
+    </style>
+}
+
+@section scripts {
+    <script>
+        $('#fileUpload').on('change', function () {
+            $('.avatar1').removeClass('open');
+        });
+        $('.avatar1').on('click', function () {
+            $(this).addClass('open');
+        });
+
+        $('html').click(function () {
+            $('.avatar1').removeClass('open');
+        });
+
+        $('.avatar1').click(function (event) {
+            event.stopPropagation();
+        });
+
+        document.getElementById("fileUpload").onchange = function () {
+            document.getElementById("newPictureForm").submit();
+        };
+    </script>
+
+    <script>
+        $("#updateLanguageForm").submit(function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.auth == "OK") {
+                        if (data.success) {
+                            hideAddLanguage();
+
+
+                            var changed = false;
+                            $("#showLanguage li").each(function (i, e) {
+                                if (parseInt($(e).attr("data-id")) == parseInt(data.language)) {
+                                    changed = true;
+                                    // TODO: Update language.
+                                    $(e).find("span").first().text(data.levelText);
+                                }
+                            });
+
+                            // Insert new language
+                            if (!changed) {
+                                //<li class="langli" data-id="2">Afrikanns - <span>3</span></li>
+                                var newElement = $("<li></li>")
+                                    .addClass("langli")
+                                    .attr("data-id", data.language)
+                                    .text(" " + data.languageText + " - ");
+                                var spanElement = $("<span></span>")
+                                    .text(data.levelText);
+                                newElement.append(spanElement);
+
+                                // <i data-id=" .. " onclick="deleteLanguage(this)" class="far fa-window-close delete-lang"></i>
+
+                                var liElement = $("<li></li>")
+                                    .addClass("far fa-window-close delete-lang")
+                                    .attr("onclick", "deleteLanguage(this);")
+                                    .attr("data-id", data.language);
+                                newElement.prepend(liElement);
+
+                                $("#showLanguage").append(newElement);
+                            }
+                        }
+                    }
+                }
+            });
+
+        });
+
+        $("#editdescription").click(function (e) {
+            e.preventDefault();
+            showEditDescription();
+        });
+
+        $("#addlanguage").click(function (e) {
+            e.preventDefault();
+            showAddLanguage();
+        });
+
+        $("#updateDescriptionForm").submit(function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/x-www-form-urlencoded",
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.auth == "OK") {
+                        if (data.success) {
+                            hideEditDescription();
+                            $("#description").text(data.description);
+                        }
+                    }
+                }
+            });
+
+        });
+
+        function showEditDescription() {
+            if (document.getElementById("editdescription").click) {
+                document.getElementById("descriptioninfo").style.display = "block";
+                document.getElementById("description").style.display = "none";
+            }
+        }
+        function hideEditDescription() {
+            if (document.getElementById("cancelEdit").click) {
+                document.getElementById("descriptioninfo").style.display = "none";
+                document.getElementById("description").style.display = "block";
+            }
+        }
+
+        function deleteLanguage(input) {
+            var elem = $(input);
+            var id = elem.attr("data-id");
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("DeleteLanguage", "api/User")",
+                data: {
+                    language: id
+                },
+                success: function (data) {
+                    if (data.auth == "OK") {
+                        if (data.success) {
+                            $(elem.parent()).remove();
+                        }
+                    }
+                }
+            });
+        }
+
+        function showAddLanguage() {
+            if (document.getElementById("addlanguage").click) {
+                document.getElementById("language").style.display = "block";
+                document.getElementById("showLanguage").style.display = "none";
+            }
+        }
+        function hideAddLanguage() {
+            document.getElementById("language").style.display = "none";
+            document.getElementById("showLanguage").style.display = "block";
+
+        }
+
+        function showAddSkill() {
+            if (document.getElementById("addSkill").click) {
+                document.getElementById("editSkill").style.display = "block";
+                document.getElementById("showSkill").style.display = "none";
+            }
+        }
+        function hideAddSkill() {
+            if (document.getElementById("cancelAddLanguage").click) {
+                document.getElementById("editSkill").style.display = "none";
+                document.getElementById("showSkill").style.display = "block";
+            }
+        }
+    </script>
+}
+
+@{
+    var dbConnection = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString.Get("EscademyMDB"));
+
+    if (ViewBag.user == null)
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">Profile not found</h1>
+            </div>
+        </section>
+    }
+    else
+    {
+        var user = (User)ViewBag.user;
+        if (user.Level == (int)UserLevel.Coach)
+        {
+            dbConnection.Open();
+
+           var gameCoaches = new List<GameCoaching>();
+            using (var cmd = dbConnection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT p.SalaryUSD, p.gameId, g.Game, g.Abbreviation, g.Picture FROM esc_profilegames p JOIN esc_games g ON p.gameId = g.Id WHERE p.accountId=@id";
+                cmd.Parameters.AddWithValue("@id", (int)ViewBag.id);
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    gameCoaches.Add(new GameCoaching()
+                    {
+                        AccountId = user.Id,
+                        SalaryUSD = reader.GetDecimal("SalaryUSD"),
+                        Game = reader.GetString("Game"),
+                        Picture = reader.GetString("Picture"),
+                        Abbreviation = reader.GetString("Abbreviation"),
+                        GameId = reader.GetInt32("gameId")
+                    });
+                }
+            }
+
+            var languages = new List<UserLanguage>();
+
+            using (var cmd = dbConnection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM esc_profilelanguages WHERE account_id=@id";
+                cmd.Parameters.AddWithValue("@id", (int)ViewBag.id);
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    languages.Add(new UserLanguage()
+                    {
+                        Level = reader.GetInt32("level"),
+                        Language = reader.GetInt32("language_id")
+                    });
+                }
+            }
+
+            dbConnection.Close();
+
+            <div class="main-content">
+                <aside class="left-column">
+                    <div class="user-card">
+                        <div class="user-profile-info">
+                            <div class="user-profile-image">
+                                @{
+
+                                    if (sessionUser?.Id == user.Id)
+                                    {
+
+                                        <!-- PROFILE IMG START -->
+                                        <div class="container clearfix" style="position:relative;width:100%;height:100%;margin:0;padding:0;cursor:pointer;">
+                                            <div class="avatar1" style="background-image: url('@user.Picture')">
+
+                                                <form id="newPictureForm" data-ajax="false" enctype="multipart/form-data" action="@Url.Action("SetPicture", "Auth")" method="post">
+                                                    <svg version="1.1" id="camera" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25 15" enable-background="new 0 0 25 15" xml:space="preserve">
+                                                        <path id="cameraFrame" fill="none" stroke="white" stroke-miterlimit="10" d="M23.1,14.1H1.9c-0.6,0-1-0.4-1-1V1.9c0-0.6,0.4-1,1-1h21.2c0.6,0,1,0.4,1,1v11.3C24.1,13.7,23.7,14.1,23.1,14.1z" />
+                                                        <path id="circle" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-miterlimit="12" d="M17.7,7.5c0-2.8-2.3-5.2-5.2-5.2S7.3,4.7,7.3,7.5s2.3,5.2,5.2,5.2S17.7,10.3,17.7,7.5z" />
+                                                        <g id="plus">
+                                                            <path fill="none" id="plusLine" class="line" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" d="M20.9,2.3v4.4" />
+                                                            <path fill="none" class="line" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" d="M18.7,4.6h4.4" />
+                                                        </g>
+                                                    </svg>
+                                                    <div id="openModal">
+                                                        <input name="file" id="fileUpload" type="file" />
+                                                        <span>Drop here or<br /><a href="#" style="cursor:pointer;">Upload File</a></span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- PROFILE IMG END -->
+                                    }
+                                    else
+                                    {
+                                        <img src="@user.Picture" class="user-pict-img" alt="img description">
+                                    }
+                                }
+                            </div>
+                            <h1><a href="#">@user.FirstName @user.LastName</a></h1>
+                            <div class="user-profile-label">
+                                <div class="oneliner-wrapper">
+                                    <small class="oneliner">@Escademy.Models.UserLevelMananger.GetRoleName(user.Level)</small>
+                                    <div class="ratings-wrapper">
+                                        <ul class="ratings">
+                                            <li><i class="fas fa-star"></i></li>
+                                            <li><i class="fas fa-star"></i></li>
+                                            <li><i class="fas fa-star"></i></li>
+                                            <li><i class="fas fa-star"></i></li>
+                                            <li><i class="fas fa-star"></i></li>
+                                        </ul>
+                                        <p class="rating-text"><strong>5.0</strong> (1k+ reviews)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttons-wrapper">
+                            <a href="/home/Chat?msgto=@user.Id" class="btn">Contact Me</a>
+                        </div>
+                        <div class="user-stats-desc">
+                            <ul class="user-stats">
+                                <li><i class="fas fa-map-marker-alt"></i> <span class="txt">From</span> <strong>@user.Country</strong></li>
+                                <li>
+                                    <i class="fas fa-user"></i> <span class="txt">Games</span>
+                                    <strong style="text-align:right;">
+                                        @{
+                                            foreach (var game in gameCoaches)
+                                            {
+                                                @game.Abbreviation<br />
+                                            }
+                                        }
+                                    </strong>
+                                </li>
+                                <li><i class="fas fa-star"></i> <span class="txt">ELO/Rating</span> <strong style="text-align:right;">{game.Elo}</strong></li>
+                                <li><i class="fas fa-trophy"></i> <span class="txt">Trophies</span> <strong style="text-align:right;">{game.Trophies[0]}<br />{game.Trophies[1]}<br />{game.Trophies[2]}</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="user-profile">
+                        <div class="description">
+                            @{
+                                if (sessionUser != null && sessionUser.Id == user.Id)
+                                {
+                                    <a href="#" id="editdescription" class="add">Edit description</a>
+                                }
+                            }
+
+                            <h2>Description</h2>
+                            <p id="description" style="white-space: pre-line;">@user.Description</p>
+                            <div class="form-wrapper" id="descriptioninfo" style="display: none;     background-color: #f4f4f4; margin: 0 -15px 20px; padding: 15px; border: 1px solid #e5e5e5; border-radius: 3px;">
+                                <form id="updateDescriptionForm" action="@Url.Action("UpdateDescription", "api/User")" method="post">
+                                    <textarea maxlength="600" name="newDescription" placeholder="Please tell us about any hobbies, additional expertise, or anything else you’d like to add." style="resize: none; height: 130px; width: 100%; border: 0; border-bottom: 1px solid #e5e5e5; box-shadow: none;">@user.Description</textarea>
+                                    <span class="buttons-wrapper">
+                                        <input type="button" class="btn-lrg-standard btn-white cancel" id="cancelEdit" onclick="hideEditDescription()" value="Cancel">
+                                        <input type="submit" class="btn-lrg-standard update" value="Update">
+                                    </span>
+                                </form>
+
+                            </div>
+
+                        </div>
+                        <div class="languages">
+                            @{
+                                if (sessionUser != null && sessionUser.Id == user.Id)
+                                {
+                                    <a href="#" id="addlanguage" class="add">Add new</a>
+                                }
+                            }
+
+                            <h2>Languages</h2>
+                            <ul id="showLanguage">
+                                @*<li>  - <span>Primary Language</span></li>
+                <li>Danish</li>*@
+                                @{
+                                    foreach (var language in languages)
+                                    {
+                                        <li class="langli" data-id="@language.Language">
+                                            @{
+                                                if (sessionUser?.Id == user.Id)
+                                                {
+                                                    <i data-id="@language.Language" onclick="deleteLanguage(this)" class="far fa-window-close delete-lang"></i>
+                                                }
+                                            }
+
+                                            @UserLanguage.GetLanguageString(language.Language) - <span>@UserLanguage.GetLevelText(language.Level)</span>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <div class="form-row form-wrapper cf" id="language" style="display: none; background-color: #f4f4f4; margin: 0 -15px 20px; padding: 15px; border: 1px solid #e5e5e5; border-radius: 3px;">
+                                <form id="updateLanguageForm" action="@Url.Action("UpdateLanguage", "api/User")" method="post">
+                                    <div class="autocomplete-wrap">
+                                        <div style="display: inline-block; width: 100%;">
+                                            <label for="autocomplete-2"></label>
+                                            @*<input type="text" name="Language" placeholder="Add Language" class="capitalize" role="combobox" aria-autocomplete="both" value="" id="autocomplete-2">*@
+                                            <select class="capitalize" name="Language">
+                                                <option value="0" class="hidden">Language</option>
+                                                @*<option value="1">English</option>*@
+
+                                                @{
+                                                    foreach (var lang in UserLanguage.GetCachedList())
+                                                    {
+                                                        <option value="@lang[0]">@lang[1]</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <select class="capitalize" name="Level">
+                                        <option value="0" class="hidden">Language Level</option>
+                                        <option value="1">Basic</option>
+                                        <option value="2">Conversational</option>
+                                        <option value="3">Fluent</option>
+                                        <option value="4">Native/Bilingual</option>
+                                    </select><span class="buttons-wrapper">
+                                        <input type="submit" class="btn-lrg-standard add" value="Add">
+                                        <input type="button" class="btn-lrg-standard btn-white cancel" onclick="hideAddLanguage()" value="Cancel">
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- <div class="linked-accounts">
+        <h2>Linked Accounts</h2>
+        <ul>
+            <li><i class="fab fa-facebook-square"></i><span class="text">facebook</span></li>
+            <li><i class="fab fa-google-plus-square"></i><span class="text">google</span></li>
+            <li><i class="fab fa-linkedin"></i><span class="text">linkedin</span></li>
+        </ul>
+    </div>-->
+                        <!--<div class="skills">
+        @{ if (sessionUser != null && sessionUser.Id == user.Id)
+            {<a href="#" id="addSkill" onclick="showAddSkill()" class="add">Add new</a> } }
+        <h2>Skills</h2>
+        <ul id="showSkill">
+            <li><a href="#">{user.Skills}</a></li>
+        </ul>
+        <div class="form-row form-wrapper cf" id="editSkill" style="display: none; background-color: #f4f4f4; margin: 0 -15px 20px; padding: 15px; border: 1px solid #e5e5e5; border-radius: 3px;">
+            <div class="autocomplete-wrap">
+                <div style="display: inline-block; width: 100%;">
+                    <label for="autocomplete-2"></label>
+                    <input type="text" placeholder="Add Skill" class="capitalize" role="combobox" aria-autocomplete="both" value="" id="autocomplete-2">
+                </div>
+            </div>
+            <select class="capitalize">
+                <option value="0" class="hidden">Experience Level</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="expert">Expert</option>
+            </select><span class="buttons-wrapper">
+                <input type="submit" id="cancelAddSkill" class="btn-lrg-standard add" onclick="hideAddSkill()" value="Add">
+                <input type="submit" class="btn-lrg-standard btn-white cancel" onclick="hideAddSkill()" value="Cancel">
+            </span>
+        </div>
+    </div>-->
+
+                    </div>
+                </aside>
+                <div class="right-column">
+                    <section class="articles-block">
+                        <h1>@user.FirstName Coaching options</h1>
+                        <div class="articles-row">
+                            @{
+                                Random r = new Random();
+
+                                foreach (var coaching in gameCoaches)
+                                {
+                                    r = new Random(r.Next());
+
+                                    <article class="article-box">
+                                        <div class="box">
+                                            <div class="img-holder">
+                                                @*<a href="#"><img src="@coaching.Picture" alt="img description"></a>*@
+
+                                                <a href="@Url.Action("coachingDetails", "Coaching", new { coaching.AccountId, coaching.GameId})">
+                                                    <div class="cf">
+                                                        <img class="bottom" src="@coaching.Picture.Substring(0, coaching.Picture.Length - 4)-hover.png" />
+                                                        <img class="top" src="@coaching.Picture" />
+                                                    </div>
+                                                </a>
+
+                                            </div>
+                                            <div class="article-caption">
+                                                <header class="head">
+                                                    <div class="avatar">
+                                                        <img src="@user.Picture" alt="img description">
+                                                    </div>
+                                                    <div class="info-wrap">
+                                                        <span class="name"><a href="#">@user.FirstName</a></span>
+                                                        <span class="level">Offers coaching for</span>
+                                                    </div>
+                                                </header>
+                                                <div class="caption-body">
+                                                    <h3 style="height:40px;"><a href="#">@coaching.Game</a></h3>
+                                                    <div class="user-rating">
+                                                        @*<div style="">
+                                                                <i class="fas fa-star"></i>
+                                                                <span>
+                                                                    <strong>5.0</strong>
+                                                                </span>
+                                                            </div>*@
+                                                        <i class="fas fa-user-graduate"></i>
+                                                        <span><strong>@r.Next(0, 10)</strong>coached</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="foot">
+                                                <div class="icons-box">
+                                                    <a href="@Url.Action("coachingDetails", "Coaching", new { coaching.AccountId, coaching.GameId})" class="list-icon"><i class="far fa-credit-card"></i></a>
+                                                    <a href="@Url.Action("Chat", "home", new { msgto = user.Id })" class="list-icon"><i class="fas fa-comments"></i></a>
+
+                                                </div>
+                                                <div class="price">
+                                                    <a href="@Url.Action("coachingDetails", "Coaching", new { coaching.AccountId, coaching.GameId})">$@coaching.SalaryUSD <small>per hour</small></a>
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </article>
+                                }
+                            }
+                        </div>
+                    </section>
+                    <section class="reviews-content">
+                        <header class="head">
+                            <h1>Reviews as Seller<small><i class="fas fa-star"></i><span class="total-rating-out-five">5</span><span class="total-rating">(1473)</span></small></h1>
+                            <select>
+                                <option>Most Recent</option>
+                                <option>Positive Reviews</option>
+                                <option>Negative Reviews</option>
+                            </select>
+                        </header>
+                        <div class="reviews-wrap">
+                            <ul class="header-stars">
+                                <li>
+                                    <span class="txt">Seller communication level</span>
+                                    <small>
+                                        <i class="fas fa-star"></i>
+                                        <span class="total-rating-out-five">5</span>
+                                    </small>
+                                </li>
+                                <li>
+                                    <span class="txt">Recommend to a friend</span>
+                                    <small>
+                                        <i class="fas fa-star"></i>
+                                        <span class="total-rating-out-five">5</span>
+                                    </small>
+                                </li>
+                                <li>
+                                    <span class="txt">Service as described</span>
+                                    <small>
+                                        <i class="fas fa-star"></i>
+                                        <span class="total-rating-out-five">5</span>
+                                    </small>
+                                </li>
+                            </ul>
+                            <div class="comments-block">
+                                <!-- Spawned by profile-chat.js -->
+                                @*<ul class="review-list">
+                                        <li>
+                                            <div class="preview-img">
+                                                <a href="#"><img class="img-thumbnail" src="images/img03.jpg" alt="img description"></a>
+                                            </div>
+                                            <span class="user-pic"><span class="missing-image-user">t</span></span>
+                                            <header class="subhead">
+                                                <strong class="title">traderstoolbox</strong>
+                                                <small>
+                                                    <i class="fas fa-star"></i><span class="total-rating-out-five">5</span>
+                                                </small>
+                                            </header>
+                                            <p>great work thank you</p>
+                                            <span class="time">2 days ago</span>
+                                        </li>
+                                        <li>
+                                            <div class="preview-img">
+                                                <a href="#"><img class="img-thumbnail" src="images/img04.jpg" alt="img description"></a>
+                                            </div>
+                                            <span class="user-pic"><img src="images/img03.jpg" alt="img description"></span>
+                                            <header class="subhead">
+                                                <strong class="title">bomerang</strong>
+                                                <small>
+                                                    <i class="fas fa-star"></i><span class="total-rating-out-five">5</span>
+                                                </small>
+                                            </header>
+                                            <p>thank you thank you</p>
+                                            <span class="time">1 week ago</span>
+                                        </li>
+                                    </ul>
+                                    <div class="load-more-wrapper">
+                                        <a href="#" class="link-more">+ See More</a>
+                                    </div>*@
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        }
+        else
+        {
+            dbConnection.Open();
+            var languages = new List<UserLanguage>();
+
+            using (var cmd = dbConnection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT * FROM esc_profilelanguages WHERE account_id=@id";
+                cmd.Parameters.AddWithValue("@id", (int)ViewBag.id);
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    languages.Add(new UserLanguage()
+                    {
+                        Level = reader.GetInt32("level"),
+                        Language = reader.GetInt32("language_id")
+                    });
+                }
+            }
+
+            dbConnection.Close();
+
+            <div class="main-content">
+                <aside class="left-column">
+                    <div class="user-card">
+                        <div class="user-profile-info">
+                            <div class="user-profile-image">
+                                @{
+
+                                    if (sessionUser?.Id == user.Id)
+                                    {
+
+                                        <!-- PROFILE IMG START -->
+                                        <div class="container clearfix" style="position:relative;width:100%;height:100%;margin:0;padding:0;cursor:pointer;">
+                                            <div class="avatar1" style="background-image: url('@user.Picture')">
+
+                                                <form id="newPictureForm" data-ajax="false" enctype="multipart/form-data" action="@Url.Action("SetPicture", "Auth")" method="post">
+                                                    <svg version="1.1" id="camera" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25 15" enable-background="new 0 0 25 15" xml:space="preserve">
+                                                        <path id="cameraFrame" fill="none" stroke="white" stroke-miterlimit="10" d="M23.1,14.1H1.9c-0.6,0-1-0.4-1-1V1.9c0-0.6,0.4-1,1-1h21.2c0.6,0,1,0.4,1,1v11.3C24.1,13.7,23.7,14.1,23.1,14.1z" />
+                                                        <path id="circle" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-miterlimit="12" d="M17.7,7.5c0-2.8-2.3-5.2-5.2-5.2S7.3,4.7,7.3,7.5s2.3,5.2,5.2,5.2S17.7,10.3,17.7,7.5z" />
+                                                        <g id="plus">
+                                                            <path fill="none" id="plusLine" class="line" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" d="M20.9,2.3v4.4" />
+                                                            <path fill="none" class="line" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" d="M18.7,4.6h4.4" />
+                                                        </g>
+                                                    </svg>
+                                                    <div id="openModal">
+                                                        <input name="file" id="fileUpload" type="file" />
+                                                        <span>Drop here or<br /><a href="#" style="cursor:pointer;">Upload File</a></span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- PROFILE IMG END -->
+                                    }
+                                    else
+                                    {
+                                        <img src="@user.Picture" class="user-pict-img" alt="img description">
+                                    }
+                                }
+                            </div>
+                            <h1><a href="#">@user.FirstName @user.LastName</a></h1>
+                            <div class="user-profile-label">
+                                <div class="oneliner-wrapper">
+                                    <small class="oneliner">@Escademy.Models.UserLevelMananger.GetRoleName(user.Level)</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttons-wrapper">
+                            <a href="/home/Chat?msgto=@user.Id" class="btn">Contact Me</a>
+                        </div>
+                    </div>
+                    <div class="user-profile">
+                        <div class="languages">
+                            @{
+                                if (sessionUser != null && sessionUser.Id == user.Id)
+                                {
+                                    <a href="#" id="addlanguage" class="add">Add new</a>
+                                }
+                            }
+
+                            <h2>Languages</h2>
+                            <ul id="showLanguage">
+                                @*<li>  - <span>Primary Language</span></li>
+            <li>Danish</li>*@
+                                @{
+                                    foreach (var language in languages)
+                                    {
+                                        <li class="langli" data-id="@language.Language">
+                                            @{
+                                                if (sessionUser?.Id == user.Id)
+                                                {
+                                                    <i data-id="@language.Language" onclick="deleteLanguage(this)" class="far fa-window-close delete-lang"></i>
+                                                }
+                                            }
+
+                                            @UserLanguage.GetLanguageString(language.Language) - <span>@UserLanguage.GetLevelText(language.Level)</span>
+                                        </li>
+                                                }
+                                }
+                            </ul>
+                            <div class="form-row form-wrapper cf" id="language" style="display: none; background-color: #f4f4f4; margin: 0 -15px 20px; padding: 15px; border: 1px solid #e5e5e5; border-radius: 3px;">
+                                <form id="updateLanguageForm" action="@Url.Action("UpdateLanguage", "api/User")" method="post">
+                                    <div class="autocomplete-wrap">
+                                        <div style="display: inline-block; width: 100%;">
+                                            <label for="autocomplete-2"></label>
+                                            @*<input type="text" name="Language" placeholder="Add Language" class="capitalize" role="combobox" aria-autocomplete="both" value="" id="autocomplete-2">*@
+                                            <select class="capitalize" name="Language">
+                                                <option value="0" class="hidden">Language</option>
+                                                @*<option value="1">English</option>*@
+
+                                                @{
+                                                    foreach (var lang in UserLanguage.GetCachedList())
+                                                    {
+                                                        <option value="@lang[0]">@lang[1]</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <select class="capitalize" name="Level">
+                                        <option value="0" class="hidden">Language Level</option>
+                                        <option value="1">Basic</option>
+                                        <option value="2">Conversational</option>
+                                        <option value="3">Fluent</option>
+                                        <option value="4">Native/Bilingual</option>
+                                    </select><span class="buttons-wrapper">
+                                        <input type="submit" class="btn-lrg-standard add" value="Add">
+                                        <input type="button" class="btn-lrg-standard btn-white cancel" onclick="hideAddLanguage()" value="Cancel">
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <div class="right-column">
+                    <h1>
+                        @user.FirstName @user.LastName
+
+                        @{
+                            if (sessionUser?.Id == user.Id)
+                            {
+                                <a href="#" style="text-align: right; float: right; font-size: 14px; color: #0056b3;" id="editdescription" class="add">
+                                    Edit Description
+                                </a>
+                            }
+                        }
+                    </h1>
+
+                    @{
+                        if (user.Description.Length > 0)
+                        {
+                            <p id="description" style="white-space: pre-line">@user.Description</p>
+
+                            <div class="form-wrapper" id="descriptioninfo" style="display: none;     background-color: #f4f4f4; margin: 0 -15px 20px; padding: 15px; border: 1px solid #e5e5e5; border-radius: 3px;">
+                                <form id="updateDescriptionForm" action="@Url.Action("UpdateDescription", "api/User")" method="post">
+                                    <textarea maxlength="600" name="newDescription" placeholder="Please tell us about any hobbies, additional expertise, or anything else you’d like to add." style="resize: none; height: 335px; width: 100%; border: 1px solid #c7c7c7; box-shadow: none;">@user.Description</textarea>
+                                    <span class="buttons-wrapper">
+                                        <input type="button" class="btn-lrg-standard btn-white cancel" id="cancelEdit" onclick="hideEditDescription()" value="Cancel">
+                                        <input type="submit" class="btn-lrg-standard update" value="Update">
+                                    </span>
+                                </form>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <p>This is a private user with no description.</p>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+}

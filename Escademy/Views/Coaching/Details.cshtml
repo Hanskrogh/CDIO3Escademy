@@ -1,0 +1,345 @@
+﻿@using Escademy.Helpers;
+@using Escademy.Models;
+@using MySql.Data.MySqlClient;
+@{
+    ViewBag.Title = "Details";
+
+    GameCoaching coaching = ViewBag.coach;
+    User user = ViewBag.user;
+
+    string salary_s(int i) {
+        return (coaching.SalaryUSD*i).ToString().Replace(",",".");
+    }
+}
+@section scripts {
+
+
+    <script type="text/javascript" src="/Scripts/createcoaching.js"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+    <script>
+        window.onscroll = function () { myFunction() };
+
+        var header = document.getElementById("myHeader");
+        var sticky = header.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
+
+
+    <script src="~/Scripts/FAQFactory.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var quantity=1;
+
+            $(".order-price-updater").change(function () {
+                quantity = parseInt($(this).find("option:selected").attr("data-quantity"));
+                updateOrderPrice($(this).val());
+            });
+
+            @{
+                if (coaching != null)
+                {
+                    <text>updateOrderPrice(@salary_s(1));</text>
+                }
+            }
+
+            $.ajax({
+                url: "/crud/coach/"+@ViewBag.accountId,
+                success: function (data) {
+                        for (var i = 0; i < data.coachings.length; i++) {
+                            if (data.coachings[i].GameId == @ViewBag.gameId) {
+                                processCoaching(data.coachings[i]);
+                                break;
+                            }
+                        }
+                }
+            });
+
+
+            $(".continue-pay-btn").click(function () {
+                location.href = "@Url.Action("New", "Order")?AccountId=@ViewBag.accountId&GameId=@ViewBag.gameId&Quantity="+quantity;
+            });
+        });
+
+        function processCoaching(coach) {
+            var faqFactory = new FAQFactory($("#accordion1"));
+
+            for (var i = 0; i < coach.FAQElements.length; i++) {
+                faqFactory.create(coach.FAQElements[i].Title, coach.FAQElements[i].Description, false);
+            }
+        }
+
+        function updateOrderPrice(price) {
+            $(".order-price").text("$" + price);
+            $(".order-price-updater").val(parseFloat(price));
+        }
+
+        // fix to numeric values.
+        $(".order-price-updater option").each(function () {
+            var price = parseFloat($(this).val());
+            $(this).val(price);
+            var indexValue = parseInt($(this).text().split(" ")[0]);
+            $(this).text(indexValue + " ("+price+"$)");
+        });
+    </script>
+
+    <!-- FlexSlider -->
+    <script src="/Scripts/js/jquery.flexslider.js"></script>
+    <script src="/Scripts/js/helper-plugins.js"></script>
+    <script src="/Scripts/js/init.js"></script>
+
+    <!-- pretty photo js  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/js/jquery.prettyPhoto.min.js"></script>
+
+}
+@section styles {
+    <link href="/Content/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/css/flexslider.css" rel="stylesheet">
+    <link href="/Content/css/custom-style.css" rel="stylesheet">
+
+    <!-- pretty photo cdn -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/css/prettyPhoto.min.css" rel="stylesheet" />
+}
+
+
+@{
+
+    if (ViewBag.coach == null)
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This coach could not be found</h1>
+            </div>
+        </section>
+    }
+    else
+    {
+        <div id="myHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="detailtop">
+                            <div class="row">
+                                <div class="col-lg-6 order-lg-2 order-md-1 order-sm-1">
+                                    <ul class="rightmenu">
+                                        <li><a href="#" data-toggle="tooltip" data-placement="top" title="Save in list"><i class="fa fa-bars"></i></a></li>
+                                        <li><a href="#" class="float-left" data-toggle="tooltip" data-placement="top" title="Add to Saved"><i class="fa fa-heart-o textorange"></i> Save</a><span class="collect-count">12</span></li>
+                                        <li><a href="#"><i class="fa fa-flag"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-share-alt textorange"></i> Share</a></li>
+                                    </ul>
+                                    <div class="flclear"></div>
+                                </div>
+                                <div class="col-lg-6 order-lg-1 order-md-2 order-sm-2">
+                                    <ul class="leftmenu">
+                                        <li><a href="#overview" class="active page-scroll">Overview</a></li>
+                                        <li><a href="#description" class="page-scroll">Description</a></li>
+                                        <li><a href="#coaching-offer" class="page-scroll">Coaching Offer</a></li>
+                                        <li><a href="#faq" class="page-scroll">FAQ</a></li>
+                                    </ul>
+                                    <div class="flclear"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detailcontent">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="whitebox" id="overview">
+                            <h4 class="pb-2"><strong>@coaching.Title</strong></h4>
+                            <div class="text-muted small">
+                                <ul class="reating">
+                                    <li><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i><a class="ml-2" href="#">(10)</a></li>
+                                    <li>1 Orders in Queue</li>
+                                </ul>
+                                <div class="flclear"></div>
+                            </div>
+                            <hr class="hrlinesmall" />
+                            <div class="breadcrumbdiv">
+                                <nav>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#">Game</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Game One</a></li>
+                                        <li class="breadcrumb-item active"><a href="#">Game Two</a></li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <div class="sliderdetails">
+                                <div id="property-images" class="flexslider">
+                                    <ul class="slides">
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                    </ul>
+                                </div>
+                                <div id="property-thumbs" class="flexslider">
+                                    <ul class="slides">
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                        <li class="item"> <img src="~/Content/Images/3D mockup.jpg" alt=""> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentinfo" id="description">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>About This Coaching</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-8 rightborder">
+                                            <div style="white-space:pre-line;">
+                                                @coaching.Description
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <h6><strong>Programming Language</strong></h6>
+                                            <ul>
+                                                <li>ASP.NET</li>
+                                            </ul>
+                                            <div class="spacer15"></div>
+                                            <h6><strong>Expertise</strong></h6>
+                                            <ul>
+                                                <li>Performance</li>
+                                                <li>Design</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentinfo" id="coaching-offer">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Order Details</strong>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <div class="pull-left">
+                                        <ul class="pointsleft pb-0 pt-1">
+                                            <li><strong>Quantity</strong></li>
+                                            <li class="spacer10"></li>
+                                            <li>
+                                                <select class="form-control order-price-updater">
+                                                    @*<option>1 ($350)</option>
+                                                        <option>2 ($700)</option>
+                                                        <option>3 ($1,050)</option>
+                                                        <option>4 ($1,400)</option>
+                                                        <option>5 ($1,750)</option>
+                                                        <option>6 ($2,100)</option>
+                                                        <option>7 ($2,450)</option>
+                                                        <option>8 ($2,800)</option>
+                                                        <option>9 ($3,150)</option>
+                                                        <option>10 ($3,500)</option>*@
+
+                                                    <!-- TODO: Implement quantity discount -->
+                                                    @{
+                                                        for (int i = 1; i <= 10; i++)
+                                                        {
+                                                            <option data-quantity="@i" value="@(salary_s(i))">@i ($@(salary_s(i)))</option>
+                                                        }
+                                                    }
+
+
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="pull-right"><button class="continue-pay-btn btn btn-lrg-standard">Continue (<span class="order-price"></span>)</button></div>
+                                    <div class="flclear"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentinfo" id="faq">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Frequently Asked Questions</strong>
+                                </div>
+                                <div class="card-body pt-0 pb-0">
+                                    <div class="accordiondiv">
+                                        <div class="accordion" id="accordion1">
+                                            <!-- created by FAQFactory.js -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="whitebox">
+                            <div>
+                                <div class="pb-3"><h3><span class="order-price"></span> Order Details</h3></div>
+                                <button class="continue-pay-btn btn btn-lrg-standard btn-block">Continue (<span class="order-price"></span>)</button>
+                                <hr>
+                                <div class="pull-left"><strong>Quantity</strong></div>
+                                <div class="pull-right">
+                                    <select class="form-control order-price-updater">
+                                        @{
+                                            for (int i = 1; i <= 10; i++)
+                                            {
+                                                <option data-quantity="@i" value="@(salary_s(i))">@i ($@(salary_s(i)))</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="flclear"></div>
+                            </div>
+                        </div>
+                        <div class="whitebox">
+                            <div class="text-center">
+                                <div> <img src="data:image/png;base64,@user.Picture" class="img-fluid circular--landscape w-25" /></div>
+                                <div class="pb-2"><h4><a href="@Url.Action("Profile","Profiles", new {id = coaching.AccountId})"><strong>@user.FirstName</strong></a></h4></div>
+                                <p>Coach</p>
+                                <div class="text-muted small">
+                                    <ul class="reating">
+                                        <li><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i><a class="ml-2" href="#"><strong>5.0</strong></a></li>
+                                        <li>(25 reviews)</li>
+                                    </ul>
+                                    <div class="flclear"></div>
+                                    <div class="spacer20"></div>
+                                    <div>
+
+                                        <a href="@Url.Action("Chat", "home", new { msgto = coaching.AccountId })" class="btn btn-white-grad btn-block">Contact Me</a>
+                                        <div class="seller-card ">
+                                            <ul class="user-stats">
+                                                <li class="location1">From<strong>@user.Country</strong></li>
+                                                <li class="member-since">Member since<strong>@ViewBag.date</strong></li>
+                                                @*<li class="response-time">Avg. Response Time<strong>1 hour</strong></li>
+                                                <li class="recent-delivery">Recent Delivery<strong>about 11 hours</strong></li>*@
+                                            </ul>
+                                            <article class="seller-desc" style="white-space:pre-line">@user.Description</article>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

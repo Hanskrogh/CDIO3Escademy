@@ -1,0 +1,65 @@
+﻿@using Escademy.Models;
+@{
+    var users = new List<User>();
+    users = ViewBag.users;
+
+}
+@{
+    foreach (var coaching in ViewBag.gameCoaches)
+    {
+        var user = users.Where(c => c.Id == coaching.AccountId).FirstOrDefault();
+        var r = new Random();
+        <article class="article-box" style="width: 25%">
+        <div class="box">
+            <div class="img-holder">
+                @*<a href="#"><img src="@coaching.Picture" alt="img description"></a>*@
+
+                <a href="@Url.Action("Details", "Coaching", new { coaching.AccountId, coaching.GameId})">
+                    <div class="cf">
+                        <img class="bottom" src="@coaching.Picture.Substring(0, coaching.Picture.Length - 4)-hover.png" />
+                        <img class="top" src="@coaching.Picture" />
+                    </div>
+                </a>
+
+            </div>
+            <div class="article-caption">
+                <header class="head">
+                    <div class="avatar">
+                        <img src="data:image/png;base64,@user.Picture" alt="img description">
+                    </div>
+                    <div class="info-wrap">
+                        <span class="name"><a href="@Url.Action("Profile", "Profiles", new {Id = coaching.AccountId})">@user.FirstName</a></span>
+                        <span class="level">Offers coaching for @coaching.Abbreviation</span>
+                    </div>
+                </header>
+                <div class="caption-body">
+                    <h3 style="height:40px;"><a href="@Url.Action("coachingDetails", "Coaching", new { coaching.AccountId, coaching.GameId })">@coaching.Title</a></h3>
+                    <div class="user-rating">
+                        @*<div style="">
+                                <i class="fas fa-star"></i>
+                                <span>
+                                    <strong>5.0</strong>
+                                </span>
+                            </div>*@
+                        <i class="fas fa-user-graduate"></i>
+                        <span><strong>@r.Next(0, 10)</strong>coached</span>
+                    </div>
+                </div>
+            </div>
+            <footer class="foot">
+                <div class="icons-box">
+                    <a href="@Url.Action("Details", "Coaching", new { coaching.AccountId, coaching.GameId})" class="list-icon">
+                        <i class="far fa-credit-card"></i>
+                    </a>
+                    <a href="@Url.Action("Chat", "home", new { msgto = 1 })" class="list-icon"><i class="fas fa-comments"></i></a>
+
+                </div>
+                <div class="price">
+                    <a href="@Url.Action("Details", "Coaching", new { coaching.AccountId, coaching.GameId})">$@coaching.SalaryUSD <small>per hour</small></a>
+                </div>
+            </footer>
+        </div>
+        </article>
+
+    }
+}

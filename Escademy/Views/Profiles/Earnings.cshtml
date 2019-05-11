@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "Earnings";
+}
+@section scripts {
+    <script src="/Scripts/js/jquery-3.3.1.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/popper.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/vanta.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min1.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/jquery.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/chat.js" type="text/javascript" language="javascript"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+
+    <!-- FlexSlider -->
+    <script src="/Scripts/js/jquery.flexslider.js"></script>
+    <script src="/Scripts/js/helper-plugins.js"></script>
+    <script src="/Scripts/js/init.js"></script>
+
+}
+@section styles {
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/css/all.css">
+    <link href="/Content/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Styles Rendered -->
+    <link href="/Content/css/cssb.css" rel="stylesheet">
+    <link href="/Content/css/custom-style.css" rel="stylesheet" />
+   
+}
+
+    <div class="coaching">
+        <div class="coachinginfo">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-left">
+                            <h3>Earnings</h3>
+                        </div>
+                        <div class="pull-right pt-1">Expected Earnings: $0</div>
+                        <div class="flclear"></div>
+                        <div class="spacer20"></div>
+                        <div class="whitebox white">
+                            <ul class="earning">
+                                <li>
+                                    <div>Net Income</div>
+                                    <div class="price">$76</div>
+                                </li>
+                                <li>
+                                    <div>Withdrawn</div>
+                                    <div class="price">$76</div>
+                                </li>
+                                <li>
+                                    <div>Used for Purchases</div>
+                                    <div class="price">$0</div>
+                                </li>
+                                <li>
+                                    <div>Pending Clearance</div>
+                                    <div class="price">$0</div>
+                                </li>
+                                <li>
+                                    <div>Available for Withdrawal</div>
+                                    <div class="price">$0</div>
+                                </li>
+                            </ul>
+                            <div class="flclear"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <div class="pt-1">Withdraw</div>
+                            </div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-lrg-standard btnsmall icons" name="button" type="submit"><i class="fa fa-paypal"></i>PayPal Account</button>
+                            </div>
+                        </div>
+                        <div class="spacer20"></div>
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <div class="pt-1">Show</div>
+                            </div>
+                            <div class="col-lg-7">
+                                <ul class="show">
+                                    <li>
+                                        <select class="form-control">
+                                            <option>Everything</option>
+                                            <option>Withdrawn</option>
+                                            <option>Pending clearance</option>
+                                            <option>Cancelled revenues</option>
+                                            <option>Cleared</option>
+                                            <option>Used for purchases</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <select class="form-control">
+                                            <option>2019</option>
+                                            <option>2018</option>
+                                            <option>2017</option>
+                                            <option>2016</option>
+                                            <option>2015</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <select class="form-control">
+                                            <option>All Months</option>
+                                            <option>January</option>
+                                            <option>February</option>
+                                            <option>March</option>
+                                            <option>April</option>
+                                            <option>May</option>
+                                            <option>June</option>
+                                            <option>July</option>
+                                            <option>August</option>
+                                            <option>September</option>
+                                            <option>October</option>
+                                            <option>November</option>
+                                            <option>December</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                                <div class="flclear"></div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="text-right pt-1"><a href="#" class="btn-link"><small class="form-text"><strong>Export to CSV</strong></small></a></div>
+                            </div>
+                        </div>
+                        <div class="spacer20"></div>
+                        <div class="white">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>For</th>
+                                            <th class="text-right">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Apr 18, 2019</td>
+                                            <td>Fund Pending Clearance <a href="#">(view order)</a></td>
+                                            <td class="text-right">$33</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Apr 17, 2019</td>
+                                            <td>Order Revenue <a href="#">(view order)</a></td>
+                                            <td class="text-right">$17</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Apr 16, 2019</td>
+                                            <td>Funds Cleared <a href="#">(view order)</a></td>
+                                            <td class="text-right">$19</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Apr 18, 2019</td>
+                                            <td>Fund Pending Clearance <a href="#">(view order)</a></td>
+                                            <td class="text-right">$33</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Apr 17, 2019</td>
+                                            <td>Order Revenue <a href="#">(view order)</a></td>
+                                            <td class="text-right">$17</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Apr 16, 2019</td>
+                                            <td>Funds Cleared <a href="#">(view order)</a></td>
+                                            <td class="text-right">$19</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

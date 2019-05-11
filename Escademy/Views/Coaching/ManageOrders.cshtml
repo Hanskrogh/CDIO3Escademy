@@ -1,0 +1,293 @@
+﻿@using Escademy.Models;
+@{
+    ViewBag.Title = "Manage Order";
+
+    User user = (User)Session["User"];
+    if (user != null)
+    {
+        <div>
+            <section id="tabs" class="project-tab ">
+                <div class="row dv_Section">
+                    <div class="col-md-12">
+                        <nav style="padding-left: 0px" class="navStyle">
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a style="padding-left: 5px" class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#new" role="tab" aria-controls="nav-profile" aria-selected="false">NEW <div class="notification-count">@ViewBag.NewOrdersCount</div></a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#active" role="tab" aria-controls="nav-contact" aria-selected="false">ACTIVE <div class="notification-count">@ViewBag.ActiveOrdersCount</div></a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#delivered" role="tab" aria-controls="nav-contact" aria-selected="false">DELIVERED <div class="notification-count">@ViewBag.DeliveredOrdersCount</div></a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#completed" role="tab" aria-controls="nav-contact" aria-selected="false">COMPLETED <div class="notification-count">@ViewBag.CompletedOrdersCount</div></a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#cancelled" role="tab" aria-controls="nav-contact" aria-selected="false">CANCELLED <div class="notification-count">@ViewBag.CancelledOrdersCount</div></a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h6>NEW ORDERS</h6>
+                                @{
+                                    var NewOrderList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    NewOrderList = ViewBag.NewOrders;
+                                    if (NewOrderList != null && NewOrderList.Count > 0)
+                                    {
+                                        <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Buyer</th>
+                                                    <th>Buyer-Email</th>
+                                                    <th>Order-Date</th>
+                                                    <th>Total</th>
+                                                    <th>Note</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var NewOrd in NewOrderList)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <div class="star">
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="name-icon">@NewOrd.FirstLetter_BuyerName</div>
+                                                                <img class="profile" src="/Content/Order/images/profile.png">
+                                                                <div class="name">@NewOrd.BuyerName</div>
+                                                            </td>
+                                                            <td>@NewOrd.BuyerEmail</td>
+                                                            <td>@NewOrd.OrderDate</td>
+                                                            <td>$@NewOrd.Price</td>
+                                                            <td><img class="file-icon" src="/Content/Order/images/addfile-icon.png"></td>
+                                                            <td><button class="btn btn-xs">@NewOrd.OrderStatus</button></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="NoRecord md">No Record Found</div>
+                                    }
+                                }
+                            </div>
+
+                            <!--Active TAB-->
+                            <div class="tab-pane fade show" id="active" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h6>ACTIVE ORDERS</h6>
+                                @{
+                                    var ActiveOrderList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    ActiveOrderList = ViewBag.ActiveOrders;
+                                    if (ActiveOrderList != null && ActiveOrderList.Count > 0)
+                                    {
+                                        <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Buyer</th>
+                                                    <th>Buyer-Email</th>
+                                                    <th>Order-Date</th>
+                                                    <th>Total</th>
+                                                    <th>Note</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var ActiveOrd in ActiveOrderList)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <div class="star">
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="name-icon">@ActiveOrd.FirstLetter_BuyerName</div>
+                                                                <img class="profile" src="/Content/Order/images/profile.png">
+                                                                <div class="name">@ActiveOrd.BuyerName</div>
+                                                            </td>
+                                                            <td>@ActiveOrd.BuyerEmail</td>
+                                                            <td>@ActiveOrd.OrderDate</td>
+                                                            <td>$@ActiveOrd.Price</td>
+                                                            <td><img class="file-icon" src="/Content/Order/images/addfile-icon.png"></td>
+                                                            <td><button class="btn btn-xs">@ActiveOrd.OrderStatus</button></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="NoRecord md">No Record Found</div>
+                                    }
+                                }
+                            </div>
+
+                            <!--delivered TAB-->
+                            <div class="tab-pane fade show" id="delivered" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h6>DELIVERED ORDERS</h6>
+                                @{
+                                    var DeliveredOrderList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    DeliveredOrderList = ViewBag.DeliveredOrders;
+                                    if (DeliveredOrderList != null && DeliveredOrderList.Count > 0)
+                                    {
+                                        <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Buyer</th>
+                                                    <th>Buyer-Email</th>
+                                                    <th>Order-Date</th>
+                                                    <th>Total</th>
+                                                    <th>Note</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var DeliveredOrd in DeliveredOrderList)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <div class="star">
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="name-icon">@DeliveredOrd.FirstLetter_BuyerName</div>
+                                                                <img class="profile" src="/Content/Order/images/profile.png">
+                                                                <div class="name">@DeliveredOrd.BuyerName</div>
+                                                            </td>
+                                                            <td>@DeliveredOrd.BuyerEmail</td>
+                                                            <td>@DeliveredOrd.OrderDate</td>
+                                                            <td>$@DeliveredOrd.Price</td>
+                                                            <td><img class="file-icon" src="/Content/Order/images/addfile-icon.png"></td>
+                                                            <td><button class="btn btn-xs">@DeliveredOrd.OrderStatus</button></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="NoRecord md">No Record Found</div>
+                                    }
+                                }
+                            </div>
+
+                            <!--Completed TAB-->
+                            <div class="tab-pane fade show" id="completed" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h6>COMPLETED ORDERS</h6>
+                                @{
+                                    var CompletedOrderList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    CompletedOrderList = ViewBag.CompletedOrders;
+                                    if (CompletedOrderList != null && CompletedOrderList.Count > 0)
+                                    {
+                                        <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Buyer</th>
+                                                    <th>Buyer-Email</th>
+                                                    <th>Order-Date</th>
+                                                    <th>Total</th>
+                                                    <th>Note</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var CompletedOrd in CompletedOrderList)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <div class="star">
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="name-icon">@CompletedOrd.FirstLetter_BuyerName</div>
+                                                                <img class="profile" src="/Content/Order/images/profile.png">
+                                                                <div class="name">@CompletedOrd.BuyerName</div>
+                                                            </td>
+                                                            <td>@CompletedOrd.BuyerEmail</td>
+                                                            <td>@CompletedOrd.OrderDate</td>
+                                                            <td>$@CompletedOrd.Price</td>
+                                                            <td><img class="file-icon" src="/Content/Order/images/addfile-icon.png"></td>
+                                                            <td><button class="btn btn-xs">@CompletedOrd.OrderStatus</button></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="NoRecord md">No Record Found</div>
+                                    }
+                                }
+                            </div>
+
+                            <!--Cancelled TAB-->
+                            <div class="tab-pane fade show" id="cancelled" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <h6>CANCELLED ORDERS</h6>
+                                @{
+                                    var CancelledOrderList = new List<Escademy.ViewModels.OrderDetailVM>();
+                                    CancelledOrderList = ViewBag.CancelledOrders;
+                                    if (CancelledOrderList != null && CancelledOrderList.Count > 0)
+                                    {
+                                        <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Buyer</th>
+                                                    <th>Buyer-Email</th>
+                                                    <th>Order-Date</th>
+                                                    <th>Total</th>
+                                                    <th>Note</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var CancelledOrd in CancelledOrderList)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center;">
+                                                                <div class="star">
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </div>
+                                                                <div class="name-icon">@CancelledOrd.FirstLetter_BuyerName</div>
+                                                                <img class="profile" src="/Content/Order/images/profile.png">
+                                                                <div class="name">@CancelledOrd.BuyerName</div>
+                                                            </td>
+                                                            <td>@CancelledOrd.BuyerEmail</td>
+                                                            <td>@CancelledOrd.OrderDate</td>
+                                                            <td>$@CancelledOrd.Price</td>
+                                                            <td><img class="file-icon" src="/Content/Order/images/addfile-icon.png"></td>
+                                                            <td><button class="btn btn-xs-Cancelled">@CancelledOrd.OrderStatus</button></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="NoRecord md">No Record Found</div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    }
+    else
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This coach could not be found</h1>
+            </div>
+        </section>
+    }
+}
+
+
+@section scripts {
+}
+@section styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/Content/Order/css/progresscircle.css" rel="stylesheet" />
+    <link href="/Content/Order/css/style.css" rel="stylesheet" />
+}

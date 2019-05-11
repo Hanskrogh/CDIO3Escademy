@@ -1,0 +1,554 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EscademyModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="esc_accounts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="text" Nullable="false" />
+          <Property Name="Password" Type="text" Nullable="false" />
+          <Property Name="Level" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="verified" Type="int" Nullable="false" />
+          <Property Name="ProfilePicture" Type="longblob" Nullable="false" />
+          <Property Name="Created_at" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+          <Property Name="Country" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_chat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sender_Id" Type="int" Nullable="false" />
+          <Property Name="Receiver_id" Type="int" Nullable="false" />
+          <Property Name="Message" Type="text" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Created_at" Type="datetime" Precision="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_faq">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="accountId" Type="int" Nullable="false" />
+          <Property Name="gameId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="text" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Game" Type="text" Nullable="false" />
+          <Property Name="Picture" Type="text" Nullable="false" />
+          <Property Name="Abbreviation" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_languages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Language" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_orders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="txn_id" Type="text" Nullable="false" />
+          <Property Name="mc_gross" Type="decimal" Precision="11" Scale="0" Nullable="false" />
+          <Property Name="mc_currency" Type="text" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="payer_email" Type="text" Nullable="false" />
+          <Property Name="payer_account_id" Type="int" Nullable="false" />
+          <Property Name="receiver_id" Type="int" Nullable="false" />
+          <Property Name="game_id" Type="int" Nullable="false" />
+          <Property Name="success" Type="bool" Nullable="false" />
+          <Property Name="date" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="order_status" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="esc_profilegames">
+          <Key>
+            <PropertyRef Name="accountId" />
+            <PropertyRef Name="gameId" />
+          </Key>
+          <Property Name="accountId" Type="int" Nullable="false" />
+          <Property Name="gameId" Type="int" Nullable="false" />
+          <Property Name="serviceTypeId" Type="int" Nullable="false" />
+          <Property Name="SalaryUSD" Type="decimal" Precision="10" Scale="3" Nullable="false" />
+          <Property Name="Title" Type="text" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+          <Property Name="Verified" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_profilegamesFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="accountId" Type="int" Nullable="false" />
+          <Property Name="gameId" Type="int" Nullable="false" />
+          <Property Name="FileType" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="FilePath" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_profilegamesPricing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="accountId" Type="int" Nullable="false" />
+          <Property Name="gameId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Hours" Type="float" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.terrack_com_db.esc_profilelanguages' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="esc_profilelanguages">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="language_id" />
+            <PropertyRef Name="level" />
+          </Key>
+          <Property Name="account_id" Type="int" Nullable="false" />
+          <Property Name="language_id" Type="int" Nullable="false" />
+          <Property Name="level" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_serviceTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_Transactions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="Status" Type="enum" Nullable="false" />
+          <Property Name="Date" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="ReceiverId" Type="int" Nullable="false" />
+          <Property Name="senderId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.terrack_com_db.esc_userpasswordreset' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="esc_userpasswordreset">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PasswordResetToken" />
+            <PropertyRef Name="PasswordResetExpiration" />
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PasswordResetToken" Type="text" Nullable="false" />
+          <Property Name="PasswordResetExpiration" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Email" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_verificationcodes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VerificationCode" Type="text" Nullable="false" />
+          <Property Name="Email" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="EscademyModelStoreContainer">
+          <EntitySet Name="esc_accounts" EntityType="Self.esc_accounts" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_chat" EntityType="Self.esc_chat" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_faq" EntityType="Self.esc_faq" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_games" EntityType="Self.esc_games" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_languages" EntityType="Self.esc_languages" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_orders" EntityType="Self.esc_orders" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_profilegames" EntityType="Self.esc_profilegames" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_profilegamesFiles" EntityType="Self.esc_profilegamesFiles" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_profilegamesPricing" EntityType="Self.esc_profilegamesPricing" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_serviceTypes" EntityType="Self.esc_serviceTypes" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_Transactions" EntityType="Self.esc_Transactions" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_verificationcodes" EntityType="Self.esc_verificationcodes" Schema="terrack_com_db" store:Type="Tables" />
+          <EntitySet Name="esc_profilelanguages" EntityType="Self.esc_profilelanguages" store:Type="Tables" store:Schema="terrack_com_db">
+            <DefiningQuery>SELECT
+`esc_profilelanguages`.`account_id`, 
+`esc_profilelanguages`.`language_id`, 
+`esc_profilelanguages`.`level`
+FROM `esc_profilelanguages` AS `esc_profilelanguages`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="esc_userpasswordreset" EntityType="Self.esc_userpasswordreset" store:Type="Tables" store:Schema="terrack_com_db">
+            <DefiningQuery>SELECT
+`esc_userpasswordreset`.`Id`, 
+`esc_userpasswordreset`.`PasswordResetToken`, 
+`esc_userpasswordreset`.`PasswordResetExpiration`, 
+`esc_userpasswordreset`.`Email`
+FROM `esc_userpasswordreset` AS `esc_userpasswordreset`</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EscademyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="esc_accounts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Level" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="verified" Type="Int32" Nullable="false" />
+          <Property Name="ProfilePicture" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="Created_at" Type="DateTime" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_chat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sender_Id" Type="Int32" Nullable="false" />
+          <Property Name="Receiver_id" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Created_at" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Game" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Picture" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Abbreviation" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_languages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Language" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_orders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="txn_id" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="mc_gross" Type="Decimal" Nullable="false" />
+          <Property Name="mc_currency" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="payer_email" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="payer_account_id" Type="Int32" Nullable="false" />
+          <Property Name="receiver_id" Type="Int32" Nullable="false" />
+          <Property Name="game_id" Type="Int32" Nullable="false" />
+          <Property Name="success" Type="Boolean" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" />
+          <Property Name="order_status" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="esc_profilegames">
+          <Key>
+            <PropertyRef Name="accountId" />
+            <PropertyRef Name="gameId" />
+          </Key>
+          <Property Name="accountId" Type="Int32" Nullable="false" />
+          <Property Name="gameId" Type="Int32" Nullable="false" />
+          <Property Name="SalaryUSD" Type="Decimal" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Verified" Type="Boolean" Nullable="false" />
+          <Property Name="serviceTypeId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_serviceTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_Transactions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="ReceiverId" Type="Int32" Nullable="false" />
+          <Property Name="senderId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_verificationcodes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VerificationCode" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_profilelanguages">
+          <Key>
+            <PropertyRef Name="account_id" />
+            <PropertyRef Name="language_id" />
+            <PropertyRef Name="level" />
+          </Key>
+          <Property Name="account_id" Type="Int32" Nullable="false" />
+          <Property Name="language_id" Type="Int32" Nullable="false" />
+          <Property Name="level" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_userpasswordreset">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PasswordResetToken" />
+            <PropertyRef Name="PasswordResetExpiration" />
+            <PropertyRef Name="Email" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PasswordResetToken" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PasswordResetExpiration" Type="DateTime" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="EscademyMDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="esc_accounts" EntityType="Self.esc_accounts" />
+          <EntitySet Name="esc_chat" EntityType="Self.esc_chat" />
+          <EntitySet Name="esc_games" EntityType="Self.esc_games" />
+          <EntitySet Name="esc_languages" EntityType="Self.esc_languages" />
+          <EntitySet Name="esc_orders" EntityType="Self.esc_orders" />
+          <EntitySet Name="esc_profilegames" EntityType="Self.esc_profilegames" />
+          <EntitySet Name="esc_serviceTypes" EntityType="Self.esc_serviceTypes" />
+          <EntitySet Name="esc_Transactions" EntityType="Self.esc_Transactions" />
+          <EntitySet Name="esc_verificationcodes" EntityType="Self.esc_verificationcodes" />
+          <EntitySet Name="esc_profilelanguages" EntityType="Self.esc_profilelanguages" />
+          <EntitySet Name="esc_userpasswordreset" EntityType="Self.esc_userpasswordreset" />
+          <EntitySet Name="esc_profilegamesPricing" EntityType="EscademyModel.esc_profilegamesPricing" />
+          <EntitySet Name="esc_faq" EntityType="EscademyModel.esc_faq" />
+          <EntitySet Name="esc_profilegamesFiles" EntityType="EscademyModel.esc_profilegamesFiles" />
+        </EntityContainer>
+        <EntityType Name="esc_profilegamesPricing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="accountId" Type="Int32" Nullable="false" />
+          <Property Name="gameId" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Single" Nullable="false" />
+          <Property Name="Hours" Type="Single" Nullable="false" />
+        </EntityType>
+        <EntityType Name="esc_faq">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="accountId" Type="Int32" Nullable="false" />
+          <Property Name="gameId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="esc_profilegamesFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="accountId" Type="Int32" Nullable="false" />
+          <Property Name="gameId" Type="Int32" Nullable="false" />
+          <Property Name="FileType" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EscademyModelStoreContainer" CdmEntityContainer="EscademyMDB">
+          <EntitySetMapping Name="esc_accounts">
+            <EntityTypeMapping TypeName="EscademyModel.esc_accounts">
+              <MappingFragment StoreEntitySet="esc_accounts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="verified" ColumnName="verified" />
+                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
+                <ScalarProperty Name="Created_at" ColumnName="Created_at" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_chat">
+            <EntityTypeMapping TypeName="EscademyModel.esc_chat">
+              <MappingFragment StoreEntitySet="esc_chat">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Sender_Id" ColumnName="Sender_Id" />
+                <ScalarProperty Name="Receiver_id" ColumnName="Receiver_id" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Created_at" ColumnName="Created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_games">
+            <EntityTypeMapping TypeName="EscademyModel.esc_games">
+              <MappingFragment StoreEntitySet="esc_games">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Game" ColumnName="Game" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_languages">
+            <EntityTypeMapping TypeName="EscademyModel.esc_languages">
+              <MappingFragment StoreEntitySet="esc_languages">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_orders">
+            <EntityTypeMapping TypeName="EscademyModel.esc_orders">
+              <MappingFragment StoreEntitySet="esc_orders">
+                <ScalarProperty Name="order_status" ColumnName="order_status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+                <ScalarProperty Name="mc_gross" ColumnName="mc_gross" />
+                <ScalarProperty Name="mc_currency" ColumnName="mc_currency" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="payer_email" ColumnName="payer_email" />
+                <ScalarProperty Name="payer_account_id" ColumnName="payer_account_id" />
+                <ScalarProperty Name="receiver_id" ColumnName="receiver_id" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="success" ColumnName="success" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_profilegames">
+            <EntityTypeMapping TypeName="EscademyModel.esc_profilegames">
+              <MappingFragment StoreEntitySet="esc_profilegames">
+                <ScalarProperty Name="serviceTypeId" ColumnName="serviceTypeId" />
+                <ScalarProperty Name="accountId" ColumnName="accountId" />
+                <ScalarProperty Name="gameId" ColumnName="gameId" />
+                <ScalarProperty Name="SalaryUSD" ColumnName="SalaryUSD" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Verified" ColumnName="Verified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_serviceTypes">
+            <EntityTypeMapping TypeName="EscademyModel.esc_serviceTypes">
+              <MappingFragment StoreEntitySet="esc_serviceTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_Transactions">
+            <EntityTypeMapping TypeName="EscademyModel.esc_Transactions">
+              <MappingFragment StoreEntitySet="esc_Transactions">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
+                <ScalarProperty Name="senderId" ColumnName="senderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_verificationcodes">
+            <EntityTypeMapping TypeName="EscademyModel.esc_verificationcodes">
+              <MappingFragment StoreEntitySet="esc_verificationcodes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_profilelanguages">
+            <EntityTypeMapping TypeName="EscademyModel.esc_profilelanguages">
+              <MappingFragment StoreEntitySet="esc_profilelanguages">
+                <ScalarProperty Name="account_id" ColumnName="account_id" />
+                <ScalarProperty Name="language_id" ColumnName="language_id" />
+                <ScalarProperty Name="level" ColumnName="level" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_userpasswordreset">
+            <EntityTypeMapping TypeName="EscademyModel.esc_userpasswordreset">
+              <MappingFragment StoreEntitySet="esc_userpasswordreset">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PasswordResetToken" ColumnName="PasswordResetToken" />
+                <ScalarProperty Name="PasswordResetExpiration" ColumnName="PasswordResetExpiration" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_profilegamesPricing">
+            <EntityTypeMapping TypeName="EscademyModel.esc_profilegamesPricing">
+              <MappingFragment StoreEntitySet="esc_profilegamesPricing">
+                <ScalarProperty Name="Hours" ColumnName="Hours" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="gameId" ColumnName="gameId" />
+                <ScalarProperty Name="accountId" ColumnName="accountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_faq">
+            <EntityTypeMapping TypeName="EscademyModel.esc_faq">
+              <MappingFragment StoreEntitySet="esc_faq">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="gameId" ColumnName="gameId" />
+                <ScalarProperty Name="accountId" ColumnName="accountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="esc_profilegamesFiles">
+            <EntityTypeMapping TypeName="EscademyModel.esc_profilegamesFiles">
+              <MappingFragment StoreEntitySet="esc_profilegamesFiles">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="gameId" ColumnName="gameId" />
+                <ScalarProperty Name="accountId" ColumnName="accountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

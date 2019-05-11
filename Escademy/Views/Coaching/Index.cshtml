@@ -1,0 +1,524 @@
+﻿@using Escademy.Models;
+@{
+    ViewBag.Title = "Listing";
+
+    User user = (User)Session["User"];
+
+    if (user != null)
+    {
+        <div class="coaching pt-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Coaching</h3>
+                        <div class="coachingtab mt-4 pr-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <ul class="nav nav-pills" id="myTab" role="tablist">
+                                        <li class="nav-item"> <a class="nav-link active" id="active-tab" data-toggle="tab" href="#active" role="tab" aria-controls="active" aria-selected="true">Active <span class="cochingitem">5</span></a> </li>
+                                        <li class="nav-item"> <a class="nav-link" id="pending-approval-tab" data-toggle="tab" href="#pending-approval" role="tab" aria-controls="pending-approval" aria-selected="false">Pending approval<span class="cochingitem">1</span></a> </li>
+                                        @*<li class="nav-item"> <a class="nav-link" id="requires-modification-tab" data-toggle="tab" href="#requires-modification" role="tab" aria-controls="requires-modification" aria-selected="false">Requires modification</a> </li>*@
+                                        @*<li class="nav-item"> <a class="nav-link" id="draft-tab" data-toggle="tab" href="#draft" role="tab" aria-controls="draft" aria-selected="false">Draft</a> </li>*@
+                                        <li class="nav-item"> <a class="nav-link" id="denied-tab" data-toggle="tab" href="#denied" role="tab" aria-controls="denied" aria-selected="false">Denied</a> </li>
+                                        @*<li class="nav-item"> <a class="nav-link" id="paused-tab" data-toggle="tab" href="#paused" role="tab" aria-controls="paused" aria-selected="false">Paused</a> </li>*@
+                                    </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="pull-right martop12">
+                                        <ul class="nav">
+                                            <li class="nav-item"><a class="btn btn-lrg-standard btnsmall" href="@Url.Action("Create", "Coaching")">Create A New Coaching</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coachinglist">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">ACTIVE Coaching</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col text-right"><button class="btn btn-lrg-standard btnsmall deletemar">Delete</button></div>
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString.Get("EscademyMDB")))
+                                                                        {
+                                                                            conn.Open();
+                                                                            var cmd = conn.CreateCommand();
+                                                                            cmd.CommandText = "SELECT p.accountId, p.SalaryUSD, p.gameId, g.Game, g.Abbreviation, g.Picture FROM esc_profilegames p JOIN esc_games g ON p.gameId = g.Id WHERE accountId=@uid";
+                                                                            cmd.Parameters.AddWithValue("@uid", user.Id);
+
+                                                                            var reader = cmd.ExecuteReader();
+
+                                                                            while (reader.Read())
+                                                                            {
+                                                                                <tr>
+                                                                                    <th><div class="mt-2"><input type="checkbox" checked /></div></th>
+                                                                                    <td>
+                                                                                        <div class="media">
+                                                                                            <img class="mr-3" src="@reader.GetString("Picture")" alt=" ">
+                                                                                            <div class="media-body">
+                                                                                                <a href="/Coaching/Edit/?aId=@reader.GetString("accountId")&gId=@reader.GetString("gameId")" class="mt-1">@reader.GetString("Game")</a>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </td>
+                                                                                    <td><div class="mt-2">19</div></td>
+                                                                                    <td><div class="mt-2">4</div></td>
+                                                                                    <td><div class="mt-2">7</div></td>
+                                                                                    <td><div class="mt-2">0</div></td>
+                                                                                    <td><div class="mt-2">0 %</div></td>
+                                                                                    <td>
+                                                                                        <select class="form-control">
+                                                                                            <option>Action</option>
+                                                                                            <option>Preview</option>
+                                                                                            <option>Edit</option>
+                                                                                            <option>Pause</option>
+                                                                                            <option>Share</option>
+                                                                                            <option>Delete</option>
+                                                                                            <option>Add Video</option>
+                                                                                        </select>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+
+
+                                                                            conn.Close();
+                                                                        }
+                                                                    }
+
+                                                                    @*<tr>
+                                                                            <th><div class="mt-2"><input type="checkbox" /></div></th>
+                                                                            <td>
+                                                                                <div class="media">
+                                                                                    <img class="mr-3" src="images/app-img.jpg" alt=" ">
+                                                                                    <div class="media-body">
+                                                                                        <p class="mt-1">Game Coaching</p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </td>
+                                                                            <td><div class="mt-2">19</div></td>
+                                                                            <td><div class="mt-2">4</div></td>
+                                                                            <td><div class="mt-2">7</div></td>
+                                                                            <td><div class="mt-2">0</div></td>
+                                                                            <td><div class="mt-2">0 %</div></td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option>Action</option>
+                                                                                    <option>Preview</option>
+                                                                                    <option>Edit</option>
+                                                                                    <option>Pause</option>
+                                                                                    <option>Share</option>
+                                                                                    <option>Delete</option>
+                                                                                    <option>Add Video</option>
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th><div class="mt-2"><input type="checkbox" /></div></th>
+                                                                            <td>
+                                                                                <div class="media">
+                                                                                    <img class="mr-3" src="images/app-img.jpg" alt=" ">
+                                                                                    <div class="media-body">
+                                                                                        <p class="mt-1">Game Coaching</p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </td>
+                                                                            <td><div class="mt-2">19</div></td>
+                                                                            <td><div class="mt-2">4</div></td>
+                                                                            <td><div class="mt-2">7</div></td>
+                                                                            <td><div class="mt-2">0</div></td>
+                                                                            <td><div class="mt-2">0 %</div></td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option>Action</option>
+                                                                                    <option>Preview</option>
+                                                                                    <option>Edit</option>
+                                                                                    <option>Pause</option>
+                                                                                    <option>Share</option>
+                                                                                    <option>Delete</option>
+                                                                                    <option>Add Video</option>
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th><div class="mt-2"><input type="checkbox" /></div></th>
+                                                                            <td>
+                                                                                <div class="media">
+                                                                                    <img class="mr-3" src="images/app-img.jpg" alt=" ">
+                                                                                    <div class="media-body">
+                                                                                        <p class="mt-1">Game Coaching</p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </td>
+                                                                            <td><div class="mt-2">19</div></td>
+                                                                            <td><div class="mt-2">4</div></td>
+                                                                            <td><div class="mt-2">7</div></td>
+                                                                            <td><div class="mt-2">0</div></td>
+                                                                            <td><div class="mt-2">0 %</div></td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option>Action</option>
+                                                                                    <option>Preview</option>
+                                                                                    <option>Edit</option>
+                                                                                    <option>Pause</option>
+                                                                                    <option>Share</option>
+                                                                                    <option>Delete</option>
+                                                                                    <option>Add Video</option>
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th><div class="mt-2"><input type="checkbox" /></div></th>
+                                                                            <td>
+                                                                                <div class="media">
+                                                                                    <img class="mr-3" src="images/app-img.jpg" alt=" ">
+                                                                                    <div class="media-body">
+                                                                                        <p class="mt-1">Game Coaching</p>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </td>
+                                                                            <td><div class="mt-2">19</div></td>
+                                                                            <td><div class="mt-2">4</div></td>
+                                                                            <td><div class="mt-2">7</div></td>
+                                                                            <td><div class="mt-2">0</div></td>
+                                                                            <td><div class="mt-2">0 %</div></td>
+                                                                            <td>
+                                                                                <select class="form-control">
+                                                                                    <option>Action</option>
+                                                                                    <option>Preview</option>
+                                                                                    <option>Edit</option>
+                                                                                    <option>Pause</option>
+                                                                                    <option>Share</option>
+                                                                                    <option>Delete</option>
+                                                                                    <option>Add Video</option>
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>*@
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="pending-approval" role="tabpanel" aria-labelledby="pending-approval-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">PENDING APPROVAL</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th><div class="mt-2"><input type="checkbox" /></div></th>
+                                                                        <td>
+                                                                            <div class="media">
+                                                                                <img class="mr-3" src="images/app-img.jpg" alt=" ">
+                                                                                <div class="media-body">
+                                                                                    <p class="mt-1">Game Coaching</p>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </td>
+                                                                        <td><div class="mt-2">19</div></td>
+                                                                        <td><div class="mt-2">4</div></td>
+                                                                        <td><div class="mt-2">7</div></td>
+                                                                        <td><div class="mt-2">0</div></td>
+                                                                        <td><div class="mt-2">0 %</div></td>
+                                                                        <td>
+                                                                            <select class="form-control">
+                                                                                <option>Action</option>
+                                                                                <option>Preview</option>
+                                                                                <option>Edit</option>
+                                                                                <option>Pause</option>
+                                                                                <option>Share</option>
+                                                                                <option>Delete</option>
+                                                                                <option>Add Video</option>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="requires-modification" role="tabpanel" aria-labelledby="requires-modification-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">Requires modification</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="7">No Requires modification to show.</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="draft" role="tabpanel" aria-labelledby="draft-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">Draft</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="7">No Draft to show.</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="denied" role="tabpanel" aria-labelledby="denied-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">Denied</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="7">No Denied to show.</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="paused" role="tabpanel" aria-labelledby="paused-tab">
+                                                <div class="tabtop">
+                                                    <div class="p-2">
+                                                        <div class="pull-left"><div class="activecoach">Paused</div></div>
+                                                        <div class="pull-right">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <select class="form-control">
+                                                                        <option>Last 7 days</option>
+                                                                        <option>Last 30 days</option>
+                                                                        <option>Last 3 months</option>
+                                                                        <option>Last 6 months</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flclear"></div>
+                                                    </div>
+                                                    <div class="listofcoch">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" /></th>
+                                                                        <th>Coaching</th>
+                                                                        <th>Impressions</th>
+                                                                        <th>Clicks</th>
+                                                                        <th>Views</th>
+                                                                        <th>Orders</th>
+                                                                        <th>Cancellations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="7">No Paused to show.</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@section scripts {
+    <script src="/Scripts/js/jquery-3.3.1.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/popper.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/vanta.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min1.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/jquery.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/chat.js" type="text/javascript" language="javascript"></script>
+
+
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+
+
+}
+@section styles {
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/css/all.css">
+    <link href="/Content/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Styles Rendered -->
+    <link href="/Content/css/cssb.css" rel="stylesheet">
+    <link href="/Content/css/custom-style.css" rel="stylesheet">
+}

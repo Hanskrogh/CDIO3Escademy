@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright</value>
+  </data>
+  <data name="DoYouHaveTalentCareer" xml:space="preserve">
+    <value>Do you have talent and would love to connect with similar minds all around the world?
+You can leverage our E-Sport Academy to connect, network and learn new skills from pro players all around the world. We are packing the best E-Sport coaches and pro players in the world.</value>
+  </data>
+  <data name="ESportAcademy" xml:space="preserve">
+    <value>E-Sport Academy</value>
+  </data>
+  <data name="ExpandNetwork" xml:space="preserve">
+    <value>Expand your Network</value>
+  </data>
+  <data name="FooterAboutUs" xml:space="preserve">
+    <value>E-Sport Academy's purpose is to create a platform for passionate e-sport players who would like to develop themselves.
+Maybe your goal is to become the best amongst your friends, or go all-in and try to join the competitive scene.
+All this requires education and learning which is why we created E-Sport academy! We have coaches from around the world who is extraordinarily high level gamers.
+Our values is quality over quantity so our customers gets the best possible service on the market!</value>
+  </data>
+  <data name="FooterAboutUsTitle" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+  <data name="FooterContactUsTitle" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="FooterContributeTitle" xml:space="preserve">
+    <value>Contribute</value>
+  </data>
+  <data name="FooterPrivacyPolicyTitle" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="FooterSitemapTitle" xml:space="preserve">
+    <value>Sitemap</value>
+  </data>
+  <data name="HeaderFollowUsTwitter" xml:space="preserve">
+    <value>Follow us on Twitter</value>
+  </data>
+  <data name="HeaderJoinUsDiscord" xml:space="preserve">
+    <value>Join us on Discord</value>
+  </data>
+  <data name="HeaderLikeUsFB" xml:space="preserve">
+    <value>Like us onFacebook</value>
+  </data>
+  <data name="HelpCreateNetwork" xml:space="preserve">
+    <value>Vi hjælper dig med at skabe et netværk af andre lige så passioneret spillere som dig.</value>
+  </data>
+  <data name="MenuAdministration" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="MenuCoaches" xml:space="preserve">
+    <value>Coaches</value>
+  </data>
+  <data name="MenuEditProfile" xml:space="preserve">
+    <value>Rediger Profil</value>
+  </data>
+  <data name="MenuHome" xml:space="preserve">
+    <value>Forside</value>
+  </data>
+  <data name="MenuLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MenuLogout" xml:space="preserve">
+    <value>Log af</value>
+  </data>
+  <data name="MenuTeams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="offeredVariedCoachingCategories" xml:space="preserve">
+    <value>With the growth in E-Sports, gamers all around the world are looking to improve, and pro players are eager to coach gamers to become world class E-Sports game players. 
+
+We offer coaching services in different games, by well-experienced coaches. Our coaches are not just any coach; they’re professionals who have passed our rigorous application process and are experienced in both gaming and teaching. Go through our games, make your choice and get started immediately. A coach is waiting for you!</value>
+  </data>
+  <data name="OverviewOfSpeedCourses" xml:space="preserve">
+    <value>Get Started!</value>
+  </data>
+  <data name="ReachSuccess_JourneyPro" xml:space="preserve">
+    <value>The E-Sport industry is tough and only the skilled and diligent excel. With our online game coaching platform at your disposal, you’re ahead, and there’s no turning back to failure. Pick your favorite game, pick a coach and start your journey to becoming the best in the world.</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Read More</value>
+  </data>
+  <data name="RightsReservedBy" xml:space="preserve">
+    <value>Copyrights Reserved by </value>
+  </data>
+  <data name="TrustpilotFirstReview" xml:space="preserve">
+    <value>Be the first to review us on</value>
+  </data>
+  <data name="TrustpilotReviewCount" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
+  <data name="variedCoaching" xml:space="preserve">
+    <value>Online E-Sport coaching!</value>
+  </data>
+  <data name="MenuProfile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="Apex_Description" xml:space="preserve">
+    <value>Apex legends is the hottest Battle Royal game to hit the gaming scene. For you to excel in the game, it’s crucial you learn the guns and understand each unique legend and their abilities. With these abilities, you can build your reputation and be among the few experts in the game.
+Try our Apex Legends coaching service and start winning. Our experienced coaches will help you build on your strengths so you can get kills and carry your team to a deserved victory.</value>
+  </data>
+  <data name="CSGO_Description" xml:space="preserve">
+    <value>Counter-Strike: Global Offensive is one of the most fast-paced, breathtaking and competitive team FPS games in the industry. If you’re looking to improve your counter strike skills or choose the right loadout under pressure, our professional Counter-Strike coaches are here to help you. Your gaming experience doesn’t matter, with E-Sport Academy; you’ve got something to learn.</value>
+  </data>
+  <data name="Dota2_Description" xml:space="preserve">
+    <value>This is one of the most intense, most played E-sports games. You need skills in tweaking hero builds, winning your lane, pushing down towers amongst others, if you wish to dominate ranked players. Just like in any competitive game, all levels of players can get stuck and unable to progress further in the game. This is where our DotA2 coaching services come in.
+Our coaches are experienced in the game and will help you navigate your way to the top of the list of experts in DotA2. They’re not just gamers but excellent teachers who will give you the hands-on knowledge you need.</value>
+  </data>
+  <data name="Fortnite_Description" xml:space="preserve">
+    <value>Fortnite is a new online battle royale survival game introduced in 2017. Though new, it has attracted more than 100 million players in less than 2 years. As a new game, people are still figuring it all out so this could be the perfect opportunity for you to step up your game and be among the few experts. 
+When you start building your Fortnite reputation early on, you can become one of the best players in the E-Sport industry. Our experienced Fortnite coaches are there to guide you through the high-energy and action-packed nature of the game, so you don’t get overwhelmed.</value>
+  </data>
+  <data name="LoL_Description" xml:space="preserve">
+    <value>League of legends, one of the most popular and extremely competitive online battle arena, has many aspects and approaches to it. The game can be overwhelming and challenging to navigate through to the top, but don’t worry, our league of legends coaching service has got you covered.
+Our extensively experienced and dedicated LoL coaches will provide you with bespoke lessons depending on your playing level. If you’re aiming to reach your goal, our coaches will use their knowledge and skills to get you there.</value>
+  </data>
+  <data name="Wow_Description" xml:space="preserve">
+    <value>To be the best in this game, you should understand your game level and all the essential aspects of the game. The game is stressful for new players and requires constant maintenance of high concentration and extended ability to deal with unknown and challenging situations.
+Never to worry; our coaches are experts that are successful as competitive WoW players and are eager to give you important advice and insights that will immensely improve your performance.</value>
+  </data>
+</root>

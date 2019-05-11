@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "orderDetails";
+}
+@section scripts {
+    <script src="/Scripts/js/jquery-3.3.1.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/popper.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/vanta.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/bootstrap.min1.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/jquery.min.js" type="text/javascript" language="javascript"></script>
+    <script src="/Scripts/js/chat.js" type="text/javascript" language="javascript"></script>
+    
+    <script type="text/javascript" language="javascript">
+        $(document).on('show', '.accordion', function (e) {
+            //$('.accordion-heading i').toggleClass(' ');
+            $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+        });
+
+        $(document).on('hide', '.accordion', function (e) {
+            $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+            //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+        });
+    </script>
+
+
+}
+@section styles {
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/Content/css/bootstrap.min.css.map">
+    <link rel="stylesheet" href="/Content/css/all.css">
+    <link href="/Content/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Styles Rendered -->
+    <link href="/Content/css/cssb.css" rel="stylesheet">
+    <link href="/Content/css/custom-style.css" rel="stylesheet">
+
+
+}
+<div class="coaching">
+    <div class="coachingtab pt-2 pb-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="icons textorange padtop6"><i class="fa fa-map-marker"></i> <strong>Order in Progress Deliver soon</strong></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="text-right"><button class="btn btn-lrg-standard btnsmall" name="button" type="button">Deliver Now</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+    <div class="coachinginfo pb-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="whitebox white">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h3 class="float-left mr-2"><strong>Order #YXEGDD12548</strong></h3>
+                                <div class="pt-2"><a href="#" class="btn-link">View Coaching</a></div>
+                                <div class="flclear"></div>
+                                <div class="spacer5"></div>
+                                <div>Buyer: <span class="textorange">Homehost</span> <a href="#">(View History)</a> December 22, 2017</div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="text-right"><h3><strong>$20.00</strong></h3></div>
+                            </div>
+                        </div>
+                        <div class="spacer40"></div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Hours</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Game Coaching</td>
+                                        <td>2</td>
+                                        <td class="text-right">$20.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="whitebox white mb-0">
+                        <div class="text-center">
+                            <div class="textorange pb-1"><h1><i class="fa fa-rocket"></i></h1></div>
+                            <div class="textorange"><strong>ORDER STARTED</strong></div>
+                            <div>Don't waste your time reading this message …</div>
+                        </div>
+                    </div>
+                    <div class="whitebox white">
+                        <div class="orderchat">
+                            <div class="media">
+                                <img class="mr-3 rounded-circle" src="images/sunil.png" alt=" ">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1"><strong>ESport_fivver</strong></h5>
+                                    <p>Thanks for your order! I'll get to this as soon as I can.</p>
+                                    <div class="form-text text-muted">20:44 December 22, 2017</div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <img class="mr-3 rounded-circle" src="images/no-photo-small.jpg" alt=" ">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1"><strong>Homehost</strong></h5>
+                                    <p>Quisque erat purus, fringilla id elementum ut, malesuada non quam. Donec laoreet arcu vel eros rhoncus posuere eu sit amet quam. Morbi sit amet aliquet nisl, interdum lobortis justo.</p>
+                                    <div class="form-text text-muted">20:44 December 22, 2017</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <button class="btn btn-lrg-standard" name="button" type="button">Deliver Now</button>
+                        <div class="mt-2"><strong>-OR-</strong></div>
+                    </div>
+                    <div class="whitebox">
+                        <div class="row">
+                            <div class="col-md-6"><span class="text-muted">Last seen</span> 6 hours ago</div>
+                            <div class="col-md-6"><div class="text-right"><span class="text-muted mr-1">Local time</span><i class="fa fa-sun mr-2 textorange"></i> Sat 06:00</div></div>
+                        </div>
+                        <div class="mt-2"><textarea class="form-control" rows="4" placeholder="Coaching Title"></textarea><span class="form-text text-muted text-right">0/2500</span></div>
+                        <hr class="hrlinesmall">
+                        <div class="mt-3">
+                            <div class="row">
+                                <div class="col-lg-6"><button class="btn btn-white-grad">Clear Message</button></div>
+                                <div class="col-lg-6"><div class="text-right"><button class="btn btn-lrg-standard">Send</button></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mb-5">
+                        View <a href="#" class="btn-link">conversation</a> with Homehost in your inbox
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="whitebox white text-center">
+                        <p>Need to change or cancel <br>your order?</p>
+                        <div class="spacer10"></div>
+                        <button class="btn btn-lrg-standard btnsmall" name="button" type="button">Cancel Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,289 @@
+﻿@using Escademy.Models;
+@{
+    ViewBag.Title = "Admin";
+    User user = (User)Session["user"];
+
+    if (user.HasRole(UserLevel.Admin))
+    {
+        <!-- ADMIN SECTION -->
+        <div style="background-color: #e9ecef;width:100%;height:100%;">
+            <section class="jumbotron text-center">
+                <div class="container">
+                    @{
+                        <h1 class="display-3">Hej, @(user.FirstName)</h1>
+                    }
+                    <br />
+                    <p class="lead text-muted">
+                        Velkommen til administrations sektionen. Hvis man vil rette i en bruger, men ikke ønsker at ændre på deres password så lad "Password" feltet stå blankt i "Ret Bruger"
+                    </p>
+                </div>
+            </section>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <form id="fUpdateUser" method="post" action="../api/user/UpdateUser">
+                            <div class="my-3 p-3 bg-white rounded shadow-sm">
+                                <h6 class="border-bottom border-gray pb-2 mb-0">Ret Bruger</h6>
+                                <div class="media text-muted pt-3" style="display: block;">
+
+                                    <div class="form-group row">
+                                        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-8">
+                                            <input name="Email" type="text" class="form-control" id="staticEmail" placeholder="email@example.com">
+                                        </div>
+                                        <input type="button" class="btn btn-success" id="getStaticEmail" value="Hent" />
+                                    </div>
+
+
+                                    <p id="insertMailLabel" class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">Indtast mail og tryk hent, herefter kan du redigerer i brugeren.</p>
+                                    <p></p>
+
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input name="Password" readonly type="password" class="form-control" id="inputPassword">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="firstName" class="col-sm-2 col-form-label">Fornavn</label>
+                                        <div class="col-sm-10">
+                                            <input name="FirstName" readonly type="text" class="form-control" id="firstName">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="lastName" class="col-sm-2 col-form-label">Efternavn</label>
+                                        <div class="col-sm-10">
+                                            <input name="LastName" readonly type="text" class="form-control" id="lastName">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="level" class="col-sm-2 col-form-label">Level</label>
+                                        <div class="col-sm-10">
+                                            <input name="Level" readonly type="number" class="form-control" id="level">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"></p>
+                                <small><input id="updateUserSubmit" type="submit" disabled class="btn btn-outline-danger disabled btn-sm d-block mt-3 text-right" style="margin-left:auto;" value="Opdater Bruger" /></small>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-3 my-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Account Statistik</h5>
+
+                                @{
+                                    using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString.Get("EscademyMDB")))
+                                    {
+                                        conn.Open();
+                                        using (var cmd = conn.CreateCommand())
+                                        {
+                                            cmd.CommandText = "SELECT COUNT(*) FROM esc_accounts";
+                                            var reader = cmd.ExecuteReader();
+                                            reader.Read();
+
+                                            <p class="card-text">
+                                                På escademy.com er der i øjeblikket <b>@reader.GetInt32(0)</b> aktive accounts i systemet.
+                                            </p>
+                                        }
+                                        using (var cmd = conn.CreateCommand())
+                                        {
+                                            cmd.CommandText = "SELECT COUNT(*) FROM esc_accounts WHERE Level = 3";
+                                            var reader = cmd.ExecuteReader();
+                                            reader.Read();
+
+                                            <p class="card-text">
+                                                Ud af disse accounts er der <b>@reader.GetInt32(0)</b> coaches.
+                                            </p>
+                                        }
+                                        conn.Close();
+                                    }
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 my-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Transaktioner</h5>
+                                <p class="card-text">Tryk på knappen forneden for at downloade en oversigt over transaktioner gennem den sidste måned</p>
+                                <a href="#" class="btn btn-outline-primary">Download Rapport</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-4 my-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="@Url.Action("MailTest", "Auth")" method="post">
+                                    <h5 class="card-title">Test Mail</h5>
+                                    <p class="card-text">Tryk for at sende en test mail.</p>
+
+                                    <div class="form-group">
+                                        <input name="Email" type="text" disabled class="form-control disabled" value="" />
+                                    </div>
+
+                                    <input type="submit" disabled class="btn disabled btn-outline-primary" value="Send Mail" />
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 my-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <form data-ajax="false" enctype="multipart/form-data" action="@Url.Action("SetPicture", "Auth")" method="post">
+                                    <h5 class="card-title">Sæt Profilbilled</h5>
+                                    <p class="card-text">Sætter dit profil billede, og gemmer det i databasen.</p>
+
+                                    <div class="form-group">
+                                        <input name="file" type="file" class="form-control" />
+                                    </div>
+
+                                    <input type="submit" class="btn btn-outline-primary" value="Upload" />
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        @section scripts {
+            <script type="text/javascript">
+                /*--------- UPDATE USER ------------*/
+                $("#fUpdateUser").submit(function (e) {
+                    e.preventDefault(); 
+
+                    var form = $(this);
+                    var url = form.attr('action');
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: form.serialize(), // serializes the form's elements.
+                        success: function (data) {
+                            if (data) {
+                                DisableControls();
+                                EnableEmailControls();
+                                $("#insertMailLabel").text("Brugerinformation opdateret!");
+                            }
+                        }
+                    });
+
+
+                });
+
+                function DisableControls() {
+                    $("#inputPassword").val();
+                    
+                    $("#inputPassword").attr("readonly", true);
+                    $("#firstName").attr("readonly", true);
+                    $("#level").attr("readonly", true);
+                    $("#lastName").attr("readonly", true);
+                    $("#updateUserSubmit")
+                        .attr("disabled", true)
+                        .addClass("disabled");
+                }
+
+                function EnableControls() {
+                    $("#inputPassword").removeAttr("readonly");
+                    $("#firstName").removeAttr("readonly");
+                    $("#level").removeAttr("readonly");
+                    $("#lastName").removeAttr("readonly");
+                    $("#updateUserSubmit")
+                        .removeAttr("disabled")
+                        .removeClass("disabled");
+                }
+
+                function UpdateLabels() {
+                    $("#insertMailLabel").text("Ret i brugeren");
+                }
+
+                function DisableEmailControls() {
+                    $("#staticEmail")
+                        .attr("readonly", true)
+                        .removeClass("form-control")
+                        .addClass("form-control-plaintext");
+
+                    $("#getStaticEmail")
+                        .attr("disabled", true)
+                        .addClass("disabled");
+                }
+                function EnableEmailControls() {
+                    $("#staticEmail")
+                        .removeAttr("readonly")
+                        .addClass("form-control")
+                        .removeClass("form-control-plaintext");
+
+                    $("#getStaticEmail")
+                        .removeAttr("disabled")
+                        .removeClass("disabled");
+                }
+
+                $("#getStaticEmail").click(function () {
+                    // 1. LOAD USER INFO
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            if (this.responseText != "null") {
+                                EnableControls();
+                                UpdateLabels();
+
+                                var data = JSON.parse(this.responseText);
+                                console.log(data);
+
+                                $("#firstName").val(data.FirstName);
+                                $("#lastName").val(data.LastName);
+                                $("#level").val(data.Level);
+                                /*.. etc ..*/
+                            } else {
+                                $("#insertMailLabel").text("Kunne ikke finde en bruger med denne mail!");
+                                EnableEmailControls();
+                            }
+                        }
+                    };
+
+                    xhttp.open("GET", "../api/user/GetUserByMail?email=" + $("#staticEmail").val(), true);
+                    xhttp.send();
+                    DisableEmailControls();
+                });
+            </script>
+        }
+    }
+    else
+    {
+        <!-- 403: FORBIDDEN RESPONSE -->
+        <section class="jumbotron text-center">
+            <div class="container">
+                @{
+                    <h1 class="display-3">403: Forbidden</h1>
+                }
+                <br />
+                <p class="lead text-muted">
+                    You do not have permissions to view the contents of this page.
+                </p>
+            </div>
+        </section>
+    }
+}

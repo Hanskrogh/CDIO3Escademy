@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Applycoach";
+}
+
+@section styles {
+    <link href="~/Content/login.css" rel="stylesheet">
+}
+
+<!-- Test Comment -->
+
+<div class="container login-container">
+    <div class="row">
+        <div class="col-md-6" style="margin-left: auto; margin-right: auto;">
+            <div class="login-form-1">
+                <h3 class="display-4">Coach sign up</h3>
+                <form id="frmReg" action="@Url.Action("Register", "Auth")" method="post">
+                    <div id="confirmMailAlert" class="alert alert-danger collapse">
+                        <a id="linkClose" href="#" class="close">&times;</a>
+                        <strong>De to emails stemmer ikke overens!</strong>
+                    </div>
+                    <div class="form-group">
+                        <input name="FirstName" type="text" class="form-control" placeholder="First name" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="LastName" type="text" class="form-control" placeholder="Last name" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="Age" id="inputAge" type="date" class="form-control" placeholder="Age" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="Email" id="inputEmail" type="text" class="form-control" placeholder="Email" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="inputConfirm" class="form-control" placeholder="Confirm email" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="Languages" type="text" class="form-control" placeholder="Languages" value="" />
+                    </div>
+                    <div class="form-group">
+                        <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                        <select class="form-control rounded" name="" id="" >
+                            <option value="0" class="hidden">Coaching games:</option>
+                            <option value="">CS:GO</option>
+                            <option value="">World of Warcraft</option>
+                            <option value="">Fortnite</option>
+                            <option value="">League of Legends</option>
+                            <option value="">Dota 2</option>
+                            <option value="">Apex Legends</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input name="Rank" type="text" class="form-control" placeholder="Current Rank/ELO/Rating" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="ComExperience" type="text" class="form-control" placeholder="Any competitive experience?" value="" />
+                    </div>
+
+                    <div class="form-group">
+                        <input name="CoachExperience" type="text" class="form-control" placeholder="Any coaching experience?" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input name="Additional" type="text" class="form-control" placeholder="Addiotional Information (links to game profile, achivements, ect.)" value="" />
+                    </div>
+                    <div class="g-recaptcha" data-sitekey="6LdBNpkUAAAAAGlHKrD1cMn24yKnb8M9pLIWiPu5" data-callback="correctCaptcha"></div>
+
+                    <div class="form-group" style="margin-top: 8px;">
+                        <input id="btnSubmit" type="submit" class="btnSubmit" value="Sign up" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

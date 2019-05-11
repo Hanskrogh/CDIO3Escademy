@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Order Details";
+}
+
+
+@{
+    if (ViewBag.order != null)
+    {
+        var order = (Escademy.Models.CoachOrder)ViewBag.order;
+
+        <h1>Order Details</h1>
+        
+        <p>
+            UID: @order.Id
+        </p>
+        <p>
+            AMOUNT: @order.mc_gross @order.mc_currency
+        </p>
+        <p>
+            TRANSACTION ID: @order.txn_id
+        </p>
+        <p>
+            NEW ORDER: @order.success
+        </p>
+        <p>
+            RECIEVER ID: @order.receiver_id
+        </p>
+        <p>
+            GAME ID: @order.game_id
+        </p>
+
+        <p>
+            PAYER EMAIL: @order.payer_mail
+        </p>
+    }
+    else
+    {
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="display-3">This order could not be found.</h1>
+            </div>
+        </section>
+    }
+}

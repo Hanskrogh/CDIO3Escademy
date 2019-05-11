@@ -1,0 +1,672 @@
+﻿@using Escademy.Dal;
+@model Escademy.ViewModels.CoachingVM
+@{
+    ViewBag.Title = "Index";
+}
+<!-- Styles Rendered -->
+<link href="/Content/css/cssb.css" rel="stylesheet">
+<link href="/Content/css/smart_wizard.css" rel="stylesheet" type="text/css" />
+<link href="/Content/css/custom-style.css" rel="stylesheet">
+<style>
+    .has-error {
+        color: red;
+    }
+</style>
+<div class="container">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>@ViewBag.Error</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    else if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>@ViewBag.Success</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            @*@using (Html.BeginForm("UploadFile1", "Coaching", FormMethod.Post, new { @id = "myForm", enctype = "multipart/form-data" }))
+                {*@
+            @using (Html.BeginForm("Create", "Coaching", FormMethod.Post, new { enctype = "multipart/form-data", @id = "coachingForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div id="smartwizard2">
+                    <ul>
+                        <li><a href="#step-1"><span>1</span> Overview</a></li>
+                        <li><a href="#step-2"><span>2</span> Pricing</a></li>
+                        <li><a href="#step-3"><span>3</span> Description & FAQ</a></li>
+                        <li><a href="#step-4"><span>4</span> Gallery</a></li>
+                        <li><a href="#step-5"><span>5</span> Publish</a></li>
+                    </ul>
+                    <div>
+                        <div id="step-1">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="overviewtab" id="form-step-0" role="form" data-toggle="validator">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Coaching Title</label>
+                                                <div class="col-sm-10">
+                                                    @Html.TextAreaFor(m => m.Title, new { @class = "form-control cochingtitle", @placeholder = "Coaching Title", @required = "required", data_minlength = "3", data_maxlength = "80" })
+                                                    @*<textarea class="form-control cochingtitle" name="Title" id="Title" required placeholder="Coaching Title"></textarea>*@
+                                                    <div class="pull-left">
+                                                        @*<small class="form-text text-success">Just perfect!</small>*@
+                                                        <div class="help-block with-errors"></div>
+                                                    </div>
+                                                    <div class="pull-right"><small class="form-text text-muted"><em id="titleLength">0</em> / 80 max</small></div>
+                                                    <div class="flclear"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Category</label>
+                                                <div class="col-sm-10">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            @Html.DropDownList("GameId", new SelectList(ViewBag.DBGames, "Id", "Game"), "Please select", new { @id = "gameId_selected", @required = "required", @class = "form-control" })
+                                                            @*@Html.DropDownList("GameId", (IEnumerable<SelectListItem>
+                                                                )ViewData["DBGames"], new { @required = "required", @class = "form-control" })*@
+                                                            <div id="GameIdError" class="help-block with-errors"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Service Type</label>
+                                                <div class="col-sm-10">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            @Html.DropDownList("ServiceTypeId", (IEnumerable<SelectListItem>)ViewData["DBServiceTypes"], new { @required = "required", @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12"> <small class="form-text text-success">Recommended</small> </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Search Tags</label>
+                                                <div class="col-sm-10">
+                                                    <div class="tagsdiv"> <a href="#" class="tags"><i class="fa fa-times-circle"></i>Game</a> <a href="#" class="tags"><i class="fa fa-times-circle"></i>Game One</a> <a href="#" class="tags"><i class="fa fa-times-circle"></i>Game3</a> <a href="#" class="tags"><i class="fa fa-times-circle"></i>Game5</a> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="step-2" class="">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="form-step-1" role="form" data-toggle="validator">
+                                            <div class="pull-left">
+                                                <h3>Pricing</h3>
+                                            </div>
+                                            <div class="pull-right pt-3"><a href="javascript:void(0);" id="add_more_pricing" class="btn-link"><small class="form-text"><strong>+ Add Pricing</strong></small></a></div>
+                                            <div class="flclear"></div>
+                                            <hr class="hrline">
+                                            <div class="add_more_prices">
+                                                @*@Html.HiddenFor(x => x.Pricings)*@
+                                                @*<div class="pricings">
+
+                                                </div>*@
+                                                <div id="price_0" class="row justify-content-center prices">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-3 col-form-label">Hours</label>
+                                                            <div class="col-sm-9">
+                                                                @Html.DropDownListFor(m => m.Pricings[0].Hours, ((List<Escademy.ViewModels.PriceHourModel>)ViewBag.DBHours).Select(m => new SelectListItem { Value = m.Hour, Text = m.Hour }), new { @required = "required", @class = "form-control priceSelect" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group row">
+                                                            <label class="col-sm-3 col-form-label">Charge($)</label>
+                                                            <div class="col-sm-9">
+                                                                @Html.TextBoxFor(m => m.Pricings[0].Price, new { @class = "form-control", @placeholder = "$5", @required = "required", @type = "number", @max = "500", @min = "1" })
+                                                                <div class="pull-left">
+                                                                    @*<small class="form-text text-success">Just perfect!</small>*@
+                                                                    <div class="help-block with-errors"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 deleteBtn">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hrline">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="step-3">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="form-step-2" role="form" data-toggle="validator">
+                                            <h3>Description</h3>
+                                            <hr class="hrline">
+                                            <p>Briefly Describe Your Coaching</p>
+                                            <div class="form-group">
+                                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Need a creative designer who provide you high quality User interface (UI ) for your mobile app design, android and iOS project? You've come to the right place!", @required = "required", data_minlength = "120" })
+                                                <div class="pull-left">
+                                                    @*<small class="form-text text-success">Just perfect!</small>*@
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                                <div class="pull-left"><small class="form-text text-muted">min. 120</small></div>
+                                                <div class="pull-right"><small class="form-text text-muted"><em id="descriptionLength">0</em>/1200 Characters</small></div>
+                                                <div class="flclear"></div>
+                                            </div>
+                                            <div class="spacer10"></div>
+                                            <div class="pull-left">
+                                                <h3>Frequently Asked Questions</h3>
+                                            </div>
+                                            @*<div class="pull-right pt-3"><a href="#" id="add_FQA" class="btn-link"><small class="form-text"><strong>+ Add FAQ</strong></small></a></div>*@
+                                            <div class="flclear"></div>
+                                            <hr class="hrline">
+                                            <p>Add Questions & Answers for Your Buyers.</p>
+                                            <div class="mb-3 add_FQAClass">
+                                                <div class="form-group">
+                                                    <input type="text" id="FQA_Title" class="form-control" name="FQA_Title" placeholder="Add a Question: i.e. Do you translate to English as well?" />
+                                                    <div class="pull-left">
+                                                        <div id="FQA_TitleError" style="display:none;" class="has-error">Required!</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea class="form-control" id="FQA_Description" name="FQA_Description" rows="4" placeholder="Add an Answer: i.e. Yes, I also translate from English to Hebrew."></textarea>
+                                                    <div class="text-right"><small class="form-text text-muted">0 / 300 Characters</small></div>
+                                                    <div class="flclear"></div>
+                                                    <div class="pull-left">
+                                                        <div id="FQA_DescriptionError" style="display:none;" class="has-error">Required!</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <button id="add_FQA" type="button" class="btn btn-lrg-standard btnsmall">Add</button>
+                                                </div>
+                                            </div>
+                                            <div class="accordiondiv faqs">
+
+                                            </div>
+                                            <hr class="hrline">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="step-4">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="form-step-3" role="form" data-toggle="validator">
+                                            <h3>Build Your Coaching Gallery</h3>
+                                            <div class="pt-1">Add memorable content to your gallery to set yourself apart from competitors.</div>
+                                            <hr class="hrline">
+                                            <div class="pull-left">
+                                                <h4>Coaching Photos</h4>
+                                            </div>
+                                            <div class="pull-right form-text text-muted">(1/3)</div>
+                                            <div class="flclear"></div>
+                                            <div class="pt-1 mb-4">Upload photos that describe or are related to your Coaching.</div>
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-lg-4 firstImage">
+                                                    <div class="browsbox bowse h-100" id="ImageDataShowImage1Browse1">
+                                                        <div class="dropzone image">
+                                                            Drag a Photo or<br>
+                                                            <label>
+                                                                <div>browse</div>
+                                                                <input type="file" name="ImageData1" id="ImageData1" onchange="fileCheckForImage(this)">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="col-lg-4 2ndImage">
+                                                    <div class="browsbox bowse h-100" id="ImageDataShowImage1Browse2">
+                                                        <div class="dropzone image">
+                                                            Drag a Photo or<br>
+                                                            <label>
+                                                                <div>browse</div>
+                                                                <input type="file" name="ImageData2" id="ImageData2" onchange="fileCheckForImage(this)">
+
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    @*<img id="ImageDataShowImage2" src="#" alt="" class="img-fluid" />*@
+                                                </div>
+                                                <div class="col-lg-4 3rdImage">
+                                                    <div class="browsbox bowse h-100" id="ImageDataShowImage1Browse3">
+                                                        <div class="dropzone image">
+                                                            Drag a Photo or<br>
+                                                            <label>
+                                                                <div>browse</div>
+                                                                <input type="file" name="ImageData3" id="ImageData3" onchange="fileCheckForImage(this)">
+                                                                @*<img id="ImageDataShowImage3" src="#" alt="" class="img-fluid" />*@
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hrline">
+                                            <div class="pull-left">
+                                                <h3>Coaching Video</h3>
+                                            </div>
+                                            <div class="pull-right form-text text-muted">(0/1)</div>
+                                            <div class="flclear"></div>
+                                            <div class="pt-1">Add a relevant, high quality video that best showcases your Coaching.</div>
+                                            <div class="form-text text-muted pt-1 mb-4">Please choose a video shorter than 75 seconds and smaller than 50MB</div>
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-lg-4 videoAdd">
+                                                    <div class="browsbox bowse h-100 videoAddbrowse">
+                                                        <div class="dropzone video">
+                                                            Drag a Video or<br>
+                                                            <label>
+                                                                <div>browse</div>
+                                                                <input type="file" name="VideoData" onchange="fileCheckForVideo(this)" id="VideoData" multiple>
+                                                                
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-lg-8"></div>
+                                            </div>
+                                            <hr class="hrline">
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<input id="btnUpload" type="submit" value="FileUpload" class="btn btn-success" title="Upload File" />*@
+                            </div>
+                        </div>
+                        <div id="step-5">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-8">
+                                        <div class="publishdiv">
+                                            <h2 class="textorange"><strong>Almost There...</strong></h2>
+                                            <div class="spacer15"></div>
+                                            <h4><strong>Let's publish your Coaching and get <br>some buyers rolling in.</strong></h4>
+                                            <div class="spacer30"></div>
+                                            @*<button class="btn btn-lrg-standard">Publish Coaching</button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    $(document).on('show', '.accordion', function (e) {
+        $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+    });
+
+    $(document).on('hide', '.accordion', function (e) {
+        $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+    });
+</script>
+<!-- Include jQuery Validator plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<!-- Include SmartWizard JavaScript source -->
+<script type="text/javascript" src="/Scripts/js/jquery.smartWizard.min.js"></script>
+
+<script type="text/javascript">
+    $("#VideoDataPlay").hide();
+    function fileCheckForVideo(obj) {
+        debugger
+        //var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        //if ($.inArray($(obj).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+        //    alert("Only '.jpeg','.jpg', '.png', '.gif', '.bmp' formats are allowed.");
+        //    return;
+        //}
+        readURL1(obj);
+
+
+    }
+    function readURL1(input) {
+        debugger
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                //$("#VideoDataPlay").show();
+                $(".videoAddbrowse").hide();
+                //var data = $("#ImageDataShowImage1Div").html();
+                var newHtmlForImg = '<video id="VideoDataPlay" height=200 width=200 controls>';
+                newHtmlForImg += '<source src="#" type="video/mp4" />';
+                newHtmlForImg += '</video>';
+                $(".videoAdd").append(newHtmlForImg);
+                $('#VideoDataPlay').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function fileCheckForImage(obj) {
+        debugger
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        if ($.inArray($(obj).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            alert("Only '.jpeg','.jpg', '.png', '.gif', '.bmp' formats are allowed.");
+            return;
+        }
+        readURL(obj);
+    }
+    function readURL(input) {
+        debugger
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            //var data = $('#ImageDataShowImage1').val();
+            reader.onload = function (e) {
+                var newId = 0;
+                var newClass = "";
+                console.log(input.id);
+                if (input.id === "ImageData1") {
+                    newId = 1;
+                    newClass = ".firstImage";
+                }
+                else if (input.id === "ImageData2") {
+                    newId = 2;
+                    newClass = ".2ndImage";
+                }
+                else {
+                    newId = 3;
+                    newClass = ".3rdImage";
+                }
+                $("#ImageDataShowImage1Browse" + newId).hide();
+                //var data = $("#ImageDataShowImage1Div").html();
+                var newHtmlForImg = '<div class="browsbox h-100" id="ImageDataShowImageDiv' + newId + '">';
+                newHtmlForImg += '<div class="trash"><a href="#" onClick="deleteImage(ImageDataShowImageDiv' + newId + ')"><i class="fa fa-trash"></i></a></div>';
+                newHtmlForImg += '<img src="#" id="ImageDataShowImage' + newId + '" alt="" class="img-fluid" />';
+                newHtmlForImg += '<div class="primary">Primary</div> </div>';
+                $(newClass).append(newHtmlForImg);
+                $('#ImageDataShowImage' + newId).attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function deletePrice(id) {
+        $("#" + id).remove();
+    }
+
+    function deleteImage(val) {
+        debugger
+        $("#" + val.id).remove();
+        var newClass = "";
+        var newId = 0;
+        if (val.id === "ImageDataShowImageDiv1") {
+            newClass = ".firstImage";
+            newId = 1;
+        } else if (val.id === "ImageDataShowImageDiv2") {
+            newClass = ".2ndImage";
+            newId = 2;
+
+        } else {
+            newClass = ".3rdImage";
+            newId = 3;
+        }
+        var newHtmlForImg = '<div class="browsbox bowse h-100" id="ImageDataShowImage1Browse' + newId + '">';
+        newHtmlForImg += '<div class="dropzone image">Drag a Photo or<br><label><div>browse</div>';
+        newHtmlForImg += '<input type="file" name="ImageData" id="ImageData' + newId + '" onchange="fileCheckForImage(this)" multiple>';
+        newHtmlForImg += '</label></div></div>';
+        $(newClass).append(newHtmlForImg);
+    }
+
+    function deleteVideo(val) {
+        debugger
+        $("#VideoDataPlay").remove();
+        var newHtmlForImg = '<div class="browsbox bowse h-100 videoAddbrowse"><div class="dropzone video">Drag a Video or<br><label><div>browse</div>';
+        newHtmlForImg += '<input type="file" name="VideoData" onchange="fileCheckForVideo(this)" id="VideoData" multiple></label></div>';
+        newHtmlForImg += '</div>';
+        $(".videoAdd").append(newHtmlForImg);
+    }
+
+    $(document).ready(function () {
+
+        $("#Title").on("keyup", function () {
+            $("#titleLength").text(this.value.length);
+        });
+
+        $("#Description").on("keyup", function () {
+            $("#descriptionLength").text(this.value.length);
+        });
+
+
+        // Step show event
+        var publishableCount = 0;
+        // Smart Wizard 2
+        $('#smartwizard2').smartWizard({
+            selected: 0,
+            theme: 'default',
+            transitionEffect: 'fade',
+            showStepURLhash: false,
+            lang: {  // Language variables
+                next: 'Next',
+                previous: 'Previous'
+            },
+            anchorSettings: {
+                markDoneStep: true, // add done css
+                markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
+                removeDoneStepOnNavigateBack: true, // While navigate back done step after active step will be cleared
+                enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+            }
+        });
+
+        $("#smartwizard2").on("showStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+            //debugger;
+            //alert("You are on step "+stepNumber+" now");
+            //if (stepNumber === 4) {
+            //    $("#publishbtn")
+            //        .text("Publish")
+            //        .addClass("btn-primary")
+            //        .addClass("publish")
+            //        .removeClass("btn-secondary")
+            //        .removeClass("sw-btn-next")
+            //        .removeClass("disabled");
+            //    publishableCount++;
+            //}
+            if (stepNumber === 4) {
+                setTimeout(
+                    function () {
+                        //do something special
+                        $("#publishbtn")
+                            .text("Publish")
+                            .addClass("btn-primary")
+                            .addClass("publish")
+                            .removeClass("btn-secondary")
+                            .removeClass("sw-btn-next")
+                            .removeClass("disabled");
+                        publishableCount++;
+                    }, 100);
+            }
+            else {
+                $("#publishbtn")
+                    .text("Next")
+                    .addClass("btn-secondary")
+                    .addClass("sw-btn-next")
+                    .removeClass("btn-primary")
+                    .removeClass("publish");
+
+                publishableCount = 0;
+            }
+        });
+
+        $("#smartwizard2").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
+            var elmForm = $("#form-step-" + stepNumber);
+            // stepDirection === 'forward' :- this condition allows to do the form validation
+            // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
+            if (stepDirection === 'forward' && elmForm) {
+                elmForm.validator('validate');
+                var elmErr = elmForm.children('.has-error');
+                if (elmErr && elmErr.length > 0) {
+                    // Form validation failed
+                    return false;
+                }
+            }
+            return true;
+        });
+        // Attach publish events
+        $(".sw-btn-group .sw-btn-next").attr("id", "publishbtn");
+
+        $("#publishbtn").click(function () {
+            if ($(this).hasClass("publish")) {
+                if (publishableCount > 0) {
+                    $(".accordion").each(function (key, val) {
+                        var title = "Faqs[" + key + "].Title";
+                        var titleId = "Faqs" + key + "__Title";
+                        var description = "Faqs[" + key + "].Description";
+                        var descriptionId = "Faqs" + key + "__Description";
+                        $("#" + this.id).find(":input[type='text']").attr("name", title);
+                        $("#" + this.id).find(":input[type='text']").attr("id", titleId);
+                        $("#" + this.id).find("textarea").attr("name", description);
+                        $("#" + this.id).find("textarea").attr("id", descriptionId);
+                    });
+
+                    $(".prices").each(function (key, val) {
+                        var hourName = "Pricings[" + key + "].Hours";
+                        var hourId = "Pricings_" + key + "__Hours";
+                        var priceName = "Pricings[" + key + "].Price";
+                        var priceId = "Pricings_" + key + "__Price";
+                        $("#" + this.id).find(".priceSelect").attr("name", hourName);
+                        $("#" + this.id).find(".priceSelect").attr("id", hourId);
+                        $("#" + this.id).find(":input[type='number']").attr("name", priceName);
+                        $("#" + this.id).find(":input[type='number']").attr("id", priceId);
+                    });
+
+                    $("#coachingForm").submit();
+                }
+            }
+        });
+
+        $('#btnUpload').click(function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+
+                var fileUpload = $("#imageUpload").get(0);
+                var files = fileUpload.files;
+                var f = $('#imageUpload').prop('files')[0];
+                // Create FormData object
+                var form = new FormData();
+                form.append("FileUpload", "img_forest.jpg");
+
+                //var settings = {
+                //    "url": "http://localhost:15855/Coaching/UploadFile1",
+                //    "method": "POST",
+                //    "mimeType": "multipart/form-data",
+                //    "data": form
+                //}
+
+                //$.ajax(settings).done(function (response) {
+                //    console.log(response);
+                //}).fail(err=> {
+                //    debugger
+                //    console.log(err);
+                //});
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        //Check game is added in user account
+        $("#gameId_selected").on("change", function () {
+            var _gameId = $("#gameId_selected").val();
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": window.location.origin + "/Coaching/ExistGameInUserGamesByGameIdAndUserId?_gameId=" + _gameId,
+                "method": "GET",
+                "headers": {
+                    "cache-control": "no-cache",
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                if (response)
+                    $("#GameIdError").addClass("has-error").text("You are already coaching in this game! Please edit or delete that coaching and try again.");
+                else
+                    $("#GameIdError").removeClass("has-error").text("");
+            });
+        });
+
+        $("#deleteImg").on('click', function () {
+            $('#blah').remove();
+            $("#ImageData").remove();
+        });
+    });
+
+
+    // add pricing
+    $("#add_more_pricing").on('click', function () {
+        var prices = $(".prices");
+        var html = $("#price_0").html();
+        var deleteBtn = "<small class='form-text text-muted'><a href='javascript:void(0)' onclick='deletePrice('\price_" + prices.length + "'\)'><i class='fa fa-trash'></i>&nbsp;</a></small>";
+        var newHtml = "<div id='price_" + prices.length + "' class='row justify-content-center prices'>" + html + "</div>";
+        $(".add_more_prices").append(newHtml);
+        $("#price_" + prices.length).find(".deleteBtn").append(deleteBtn);
+    });
+
+    // add FQA
+    $('#add_FQA').on('click', function () {
+        var acc = $(".accordion");
+        var FQA_Description = $("#FQA_Description").val();
+        var FQA_Title = $("#FQA_Title").val();
+
+        if (FQA_Title.trim() == undefined || FQA_Title.trim() == null || FQA_Title.trim() == "") {
+            $("#FQA_TitleError").show();
+            return;
+        }
+        else
+            $("#FQA_TitleError").hide();
+        if (FQA_Description.trim() == undefined || FQA_Description.trim() == null || FQA_Description.trim() == "") {
+            $("#FQA_DescriptionError").show();
+            return;
+        }
+        else
+            $("#FQA_DescriptionError").hide();
+        var arr = 0;
+        if (acc.length != 0)
+            arr = acc.length;
+
+        // Html for Faq
+        var newMAChtml = '<div class="accordion" id="accordion_' + arr + '"><div class="accordion-group">';
+        newMAChtml += '<div class="accordion-heading"><a class="accordion-toggle collapsed" id="accordionAch_' + arr + '" data-toggle="collapse" data-parent="#accordion_' + arr + '" href="#collapse_' + arr + '"><i class="fa fa-bars" aria-hidden="true"></i> ' + FQA_Title + '</a> </div><div id="collapse_' + arr + '" class="accordion-body collapse">'
+        newMAChtml += '<div class="accordion-inner"><div class="form-group"><input type="text" id="addFQA_FQA_Title_' + arr + '"  class="form-control" placeholder="English Coaching" /> </div>';
+        newMAChtml += '<div class="form-group"><textarea class="form-control" id="addFQA_FQA_Description_' + arr + '" rows="4" placeholder="English Coaching"></textarea>';
+        newMAChtml += '<div class="pull-left"><small class="form-text text-muted"><a href="javascript:void(0);" onclick="deleteFAQ(accordion_' + arr + ')"><i class="fa fa-trash"></i>&nbsp; Delete</a></small></div>';
+        newMAChtml += '<div class="pull-right"><small class="form-text text-muted">16 / 300 Characters</small></div><div class="flclear"></div></div>';
+        //newMAChtml += ' <div class="text-right"><button id="CancelFQA_' + arr + '" class="btn btn-white-grad btnsmall mr-3">Cancel</button><button id="UpdateFQA' + arr + '" class="btn btn-lrg-standard btnsmall">Update</button></div>';
+        //newMAChtml += '</div> </div></div></div></div>';
+
+        // update Faq list
+        $('.accordiondiv').append(newMAChtml);
+        $("#FQA_Title").val("");
+        $("#FQA_Description").val("");
+        $('#FQA_Title').attr("value", "");
+        $('#FQA_Description').attr("value", "");
+        $("#addFQA_FQA_Title_" + arr).val(FQA_Title);
+        $("#addFQA_FQA_Description_" + arr).val(FQA_Description);
+    });
+
+    //Delete faq from list
+    function deleteFAQ(obj) {
+        $("#" + obj.id).remove();
+    }
+
+</script>
